@@ -460,7 +460,7 @@ const ExtensionsComponent = () => {
 
   const launchMeshery = () => {
     console.log("Launching Meshery...");
-    window.location.href = "https://cloud.layer5.io";
+    window.location.href = proxyUrl;
   };
 
   return (
