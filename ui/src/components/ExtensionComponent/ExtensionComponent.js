@@ -13,7 +13,7 @@ import { Avatar } from "@mui/material";
 // import CiliumIcon from '../../img/SVGs/ciliumIcon'
 // import TraefikIcon from '../../img/SVGs/traefikIcon'
 import Meshery from "../../img/SVGs/meshery";
-import MesheryIcon from "../../img/meshery-logo/CustomMesheryLogo";
+import KanvasIcon from "../../img/meshery-logo/CustomKanvasLogo";
 import { DockerMuiThemeProvider } from "@docker/docker-mui-theme";
 import CssBaseline from "@mui/material/CssBaseline";
 import { LoadComp } from "../LoadingComponent/LoadComp";
@@ -460,7 +460,7 @@ const ExtensionsComponent = () => {
 
   const launchMeshery = () => {
     console.log("Launching Meshery...");
-    window.location.href = proxyUrl;
+    window.location.href = "https://cloud.layer5.io";
   };
 
   return (
@@ -493,11 +493,10 @@ const ExtensionsComponent = () => {
           }}
         >
           <div>
-            <MesheryIcon CustomColor={isDarkTheme ? "white" : "#3C494F"} />
+            <KanvasIcon CustomColor={isDarkTheme ? "white" : "#3C494F"} />
 
             <Typography sx={{ margin: "auto", paddingTop: "1rem" }}>
-              Design and operate your cloud native deployments with the
-              extensible management plane, Meshery.
+              Design and operate your cloud native deployments with Kanvas.
             </Typography>
           </div>
         </div>

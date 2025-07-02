@@ -33,16 +33,16 @@ LABEL org.opencontainers.image.title="Meshery" \
   com.docker.desktop.extension.api.version=">= 0.2.0" \
    com.docker.extension.screenshots="[ \
       { \
-        \"alt\": \"Meshery Docker Extension\", \
+        \"alt\": \"Kanvas Docker Extension\", \
         \"url\": \"https://raw.githubusercontent.com/meshery/meshery/master/install/docker-extension/docs/img/meshmap-docker-extension-for-meshery.png\" \
       },{ \
-        \"alt\": \"Meshery Docker Extension\", \
+        \"alt\": \"Kanvas Docker Extension\", \
         \"url\": \"https://raw.githubusercontent.com/meshery/meshery/master/install/docker-extension/docs/img/Docker-extension-meshery.png\" \
       } \
     ]" \
   com.docker.extension.detailed-description="\
   <h2>Visually and collaboratively design and operate your Kubernetes clusters (<a href='https://meshery.io/catalog'>video</a>).</h2> \
-  <p>The Meshery Docker Extension is your cloud native infrastructure designer, complete with multi-cluster Kubernetes management. Meshery provides cloud native engineers with visual and collaborative interface to designing and operating cloud native infrastructure.</p> \
+  <p>The Kanvas Docker Extension is your cloud native infrastructure designer, complete with multi-cluster Kubernetes management. Meshery provides cloud native engineers with visual and collaborative interface to designing and operating cloud native infrastructure.</p> \
   <ul> \
     <li><b>Discovery of your Kubernetes environments</b> - Meshery is a multi-cluster manager and will scan your kubeconfig, allowing you to select which of your Kubernetes contexts to connect. Switch from one K8s cluster to the next or manage multiple concurrently.</li> \
     <li><b>Support for your Docker Compose apps -</b> Import your Docker Compose apps. Configure and deploy them to Kubernetes.</li> \
@@ -56,7 +56,7 @@ LABEL org.opencontainers.image.title="Meshery" \
 COPY --from=builder /backend/bin/service /
 COPY docker-compose.yaml .
 COPY metadata.json .
-COPY meshery-logo-light.svg .
+COPY kanvas-mark-logo-light.svg .
 COPY --from=client-builder /ui/build ui
 EXPOSE 7877/tcp
 CMD ["./service"]
