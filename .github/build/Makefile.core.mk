@@ -18,10 +18,7 @@
 GIT_VERSION	= $(shell git describe --tags `git rev-list --tags --max-count=1`)
 GIT_COMMITSHA = $(shell git rev-list -1 HEAD)
 GIT_STRIPPED_VERSION=$(shell git describe --tags `git rev-list --tags --max-count=1` | cut -c 2-)
-
-# Extension Point for remote provider . Add your provider here.
 REMOTE_PROVIDER="Layer5"
-
 LOCAL_PROVIDER="None"
 GOVERSION = 1.23
 GOPATH = $(shell go env GOPATH)
@@ -39,17 +36,12 @@ SHELL := /usr/bin/env bash -o pipefail
 ADAPTER_URLS := "localhost:10000 localhost:10001 localhost:10012 localhost:10013"
 
 #-----------------------------------------------------------------------------
-# Providers (Add your provider here. See https://docs.meshery.io/extensibility/providers)
+# Providers
 #-----------------------------------------------------------------------------
 REMOTE_PROVIDER_LOCAL="http://localhost:9876"
-EQUINIX_DEV="http://meshery.console.equinix.com"
-EQUINIX_DEV2="http://meshery-2.console.equinix.com"
 MESHERY_CLOUD_DEV="http://localhost:9876"
 MESHERY_CLOUD_PROD="https://cloud.layer5.io"
 MESHERY_CLOUD_STAGING="https://staging-cloud.layer5.io"
-EXOSCALE_PROD="https://sks.exoscale.com"
-EXOSCALE_STG="https://stg-sks.exoscale.com"
-EXOSCALE_DEV="https://dev-sks.exoscale.com"
 
 #-----------------------------------------------------------------------------
 # Server

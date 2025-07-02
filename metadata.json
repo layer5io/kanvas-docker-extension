@@ -1,0 +1,13 @@
+{
+  "icon": "meshery-logo-light.svg",
+  "vm": {
+    "composefile": "docker-compose.yaml"
+  },
+  "ui": {
+    "dashboard-tab": {
+      "title": "Kanvas",
+      "src": "/index.html",
+      "root": "/ui"
+    }
+  }
+}
