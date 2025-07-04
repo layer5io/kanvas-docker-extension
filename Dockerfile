@@ -27,22 +27,22 @@ FROM alpine
 ARG GIT_STRIPPED_VERSION
 ARG GIT_VERSION
 ARG RELEASE_CHANNEL
-LABEL org.opencontainers.image.title="Meshery" \
-  org.opencontainers.image.description="Meshery, the collaborative Kubernetes manager. Go multi-player as you design and operate your cloud native infrastructure with teammates." \
+LABEL org.opencontainers.image.title="Kanvas" \
+  org.opencontainers.image.description="Kanvas, the collaborative Kubernetes manager. Go multi-player as you design and operate your cloud native infrastructure with teammates." \
   org.opencontainers.image.vendor="Layer5, Inc." \
   com.docker.desktop.extension.api.version=">= 0.2.0" \
    com.docker.extension.screenshots="[ \
       { \
         \"alt\": \"Kanvas Docker Extension\", \
-        \"url\": \"https://raw.githubusercontent.com/meshery/meshery/master/install/docker-extension/docs/img/meshmap-docker-extension-for-meshery.png\" \
+        \"url\": \"https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/master/assets/docker-extension-home.png\" \
       },{ \
         \"alt\": \"Kanvas Docker Extension\", \
-        \"url\": \"https://raw.githubusercontent.com/meshery/meshery/master/install/docker-extension/docs/img/Docker-extension-meshery.png\" \
+        \"url\": \"https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/master/assets/kanvas-designer.png\" \
       } \
     ]" \
   com.docker.extension.detailed-description="\
   <h2>Visually and collaboratively design and operate your Kubernetes clusters (<a href='https://meshery.io/catalog'>video</a>).</h2> \
-  <p>The Kanvas Docker Extension is your cloud native infrastructure designer, complete with multi-cluster Kubernetes management. Meshery provides cloud native engineers with visual and collaborative interface to designing and operating cloud native infrastructure.</p> \
+  <p>The Kanvas Docker Extension is your cloud native infrastructure designer, complete with multi-cluster Kubernetes management. Kanvas provides cloud native engineers with visual and collaborative interface to designing and operating cloud native infrastructure.</p> \
   <ul> \
     <li><b>Discovery of your Kubernetes environments</b> - Meshery is a multi-cluster manager and will scan your kubeconfig, allowing you to select which of your Kubernetes contexts to connect. Switch from one K8s cluster to the next or manage multiple concurrently.</li> \
     <li><b>Support for your Docker Compose apps -</b> Import your Docker Compose apps. Configure and deploy them to Kubernetes.</li> \
@@ -50,13 +50,13 @@ LABEL org.opencontainers.image.title="Meshery" \
     <li><b>Save time with design patterns - </b>Turbo-charge your infrastructure with best practice cloud native design patterns from the <a href='https://meshery.io/catalog'>Meshery Catalog</a>.</li> \
     <li><b>Single-click deployment of all cloud native infrastructure -</b> Support for hundreds of different cloud native infrastructure tools right at your fingertips.</li> \
   </ul>" \
-  com.docker.desktop.extension.icon="https://raw.githubusercontent.com/meshery/meshery/master/install/docker-extension/docs/img/meshery-logo-light.svg" \
-  com.docker.extension.publisher-url="https://meshery.io" \
-  com.docker.extension.additional-urls="[{\"title\":\"Documentation\",\"url\":\"https://docs.meshery.io\"},{\"title\":\"Project\",\"url\":\"https://layer5.io/meshery\"},{\"title\":\"Slack\",\"url\":\"https://slack.meshery.io\"},{\"title\":\"Discussion Forum\",\"url\":\"https://meshery.io/community#community-forums\"}]"
+  com.docker.desktop.extension.icon="https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/master/assets/kanvas-designer.png" \
+  com.docker.extension.publisher-url="https://layer5.io" \
+  com.docker.extension.additional-urls="[{\"title\":\"Documentation\",\"url\":\"https://docs.layer5.io\"},{\"title\":\"Project\",\"url\":\"https://layer5.io\"},{\"title\":\"Slack\",\"url\":\"https://slack.meshery.io\"},{\"title\":\"Discussion Forum\",\"url\":\"https://layer5.io/community#community-forums\"}]"
 COPY --from=builder /backend/bin/service /
 COPY docker-compose.yaml .
 COPY metadata.json .
-COPY kanvas-mark-logo-light.svg .
+COPY assets/kanvas-mark-logo-light.svg .
 COPY --from=client-builder /ui/build ui
 EXPOSE 7877/tcp
 CMD ["./service"]
