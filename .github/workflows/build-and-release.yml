@@ -75,7 +75,7 @@ jobs:
       - name: Build and Push Docker Extension
         uses: docker/build-push-action@v6
         with:
-          context: "{{defaultContext}}:install/docker-extension"
+          context: "{{defaultContext}}"
           push: true
           build-args: |
             GIT_STRIPPED_VERSION=${{env.GIT_STRIPPED_VERSION}}
