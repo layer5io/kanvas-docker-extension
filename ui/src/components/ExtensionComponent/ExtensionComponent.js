@@ -51,48 +51,23 @@ const proxyUrl = "http://127.0.0.1:7877";
 const httpDelete = "DELETE";
 const httpPost = "POST";
 
-// const adapters = {
-//   APP_MESH: {
-//     displayName: 'App Mesh',
-//     icon: <AppmeshIcon width={40} height={40} />,
-//     name: 'APP_MESH',
-//   },
-//   CILIUM_SERVICE_MESH: {
-//     displayName: 'Cilium',
-//     icon: <CiliumIcon width={40} height={40} />,
-//     name: 'CILIUM_SERVICE_MESH',
-//   },
-//   CONSUL: {
-//     displayName: 'Consul',
-//     icon: <ConsulIcon width={40} height={40} />,
-//     name: 'CONSUL',
-//   },
-//   ISTIO: {
-//     displayName: 'Istio',
-//     icon: <IstioIcon width={40} height={40} />,
-//     name: 'ISTIO',
-//   },
-//   KUMA: {
-//     displayName: 'Kuma',
-//     icon: <KumaIcon width={40} height={40} />,
-//     name: 'KUMA',
-//   },
-//   LINKERD: {
-//     displayName: 'Linkerd',
-//     icon: <LinkerdIcon width={40} height={40} />,
-//     name: 'LINKERD',
-//   },
-//   NGINX_SERVICE_MESH: {
-//     displayName: 'NGINX',
-//     icon: <NginxIcon width={38} height={40} />,
-//     name: 'NGINX_SERVICE_MESH',
-//   },
-//   TRAEFIK_MESH: {
-//     displayName: 'Traefix Mesh',
-//     icon: <TraefikIcon width={40} height={40} />,
-//     name: 'TRAEFIK_MESH',
-//   },
-// }
+/**
+ * Gets the raw b64 file and convert it to uint8Array
+ *
+ * @param {string} dataUrl
+ * @returns {number[]} - return array of uint8Array
+ */
+const getUnit8ArrayDecodedFile = (dataUrl) => {
+  // Extract base64 content
+  const [, base64Content] = dataUrl.split(";base64,");
+  // Decode base64 content
+  const decodedContent = atob(base64Content);
+  // Convert decoded content to Uint8Array directly
+  const uint8Array = Uint8Array.from(decodedContent, (char) =>
+    char.charCodeAt(0),
+  );
+  return Array.from(uint8Array);
+};
 
 function mergeFullHTMLIntoCurrentPage(htmlString, proxyBase = proxyUrl) {
   const parser = new DOMParser();
@@ -411,44 +386,60 @@ const ExtensionsComponent = () => {
   //     })
   // }
 
-  const handleImport = () => {
-    const file = document.getElementById("upload-button").files[0];
-    // Create a reader
-    const type = String(file.name);
-    const reader = new FileReader();
-    reader.addEventListener("load", (event) => {
-      let body = { save: true };
-      let name = randomApplicationNameGenerator();
-      body = JSON.stringify({
-        ...body,
-        application_data: { name, application_file: event.target.result },
-      });
-      if (!(type.includes(".yaml") || type.includes(".yml"))) {
-        window.ddClient.desktopUI.toast.error(
-          "Some error occured while uploading the compose file. ",
-        );
+  const getBase64EncodedFile = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const base64String = reader.result;
+        resolve(base64String);
+      };
+
+      reader.onerror = (error) => reject(error);
+
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleImport = async (e) => {
+    try {
+      const file = e.target?.files?.[0];
+
+      if (!file) {
+        window.ddClient.desktopUI.toast.error("No file selected.");
         return;
       }
 
-      fetch(proxyUrl + "/api/application", {
+      const name = randomApplicationNameGenerator();
+      const base64File = await getBase64EncodedFile(file);
+      console.log("base64", base64File);
+
+      const body = JSON.stringify({
+        name,
+        file: getUnit8ArrayDecodedFile(base64File),
+        file_name: file.name,
+      });
+
+      console.log("body", body);
+      const res = await fetch(proxyUrl + "/api/pattern/import", {
         method: "POST",
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+          "Content-Type": "application/json;charset=UTF-8",
         },
         body,
-      })
-        .then((res) => {
-          window.ddClient.desktopUI.toast.success(
-            "Compose file has been uploaded with name: " + name,
-          );
-        })
-        .catch(() =>
-          window.ddClient.desktopUI.toast.error(
-            "Some error occured while uploading the compose file.",
-          ),
-        );
-    });
-    reader.readAsText(file);
+      });
+
+      if (!res.ok) throw new Error("Upload failed");
+
+      window.ddClient.desktopUI.toast.success(
+        `Compose file has been uploaded with name: ${name}`,
+      );
+    } catch (err) {
+      console.error("Error uploading file:", err);
+      window.ddClient.desktopUI.toast.error(
+        "Some error occurred while uploading the compose file.",
+      );
+    }
   };
 
   const OpenDocs = () => {
@@ -668,111 +659,6 @@ const ExtensionsComponent = () => {
             </div>
           )}
         </SectionWrapper>
-        {isLoggedIn && (
-          <SectionWrapper>
-            <CatalogChart
-              filter={filter}
-              pattern={catalogDesigns}
-              isTheme={isDarkTheme}
-            />
-            <Grid
-              sx={{
-                backgroundColor: isDarkTheme ? "#666A75" : "#D7DADE",
-                borderRadius: "15px",
-                height: "28rem",
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "20px",
-              }}
-            >
-              <div
-                style={{
-                  paddingTop: isLoggedIn ? "1.2rem" : null,
-                  margin: "10px 0",
-                  width: "max-content",
-                }}
-              >
-                <ExtensionWrapper
-                  className="first-step"
-                  sx={{
-                    height: ["22rem", "17rem", "14rem"],
-                  }}
-                >
-                  {catalogDesigns?.patterns.length > 0 ? (
-                    <div>
-                      <Typography
-                        variant="h5"
-                        sx={{ padding: "8rem 0 1rem 0", fontWeight: "bold" }}
-                      >
-                        Designs
-                      </Typography>
-                      <MeshModels>
-                        {catalogDesigns?.patterns
-                          ?.slice(0, 2)
-                          .map((pattern, index) => {
-                            let patternType =
-                              pattern.catalog_data &&
-                              pattern.catalog_data.type &&
-                              pattern.catalog_data.type !== ""
-                                ? pattern.catalog_data.type
-                                : "deployment";
-                            return (
-                              <SistentThemeProviderWithoutBaseLine>
-                                <CatalogCard
-                                  onCardClick={() => {
-                                    window.ddClient.host.openExternal(
-                                      `${providerUrl}/catalog/content/catalog/${pattern?.id}`,
-                                    );
-                                  }}
-                                  pattern={pattern}
-                                  key={`design-${index}`}
-                                  patternType={patternType}
-                                  catalog={true}
-                                  cardHeight="18rem"
-                                  cardWidth="15rem"
-                                />
-                              </SistentThemeProviderWithoutBaseLine>
-                            );
-                          })}
-                      </MeshModels>
-                      <StyledButton
-                        onClick={() => {
-                          window.ddClient.host.openExternal(
-                            `${providerUrl}/catalog`,
-                          );
-                        }}
-                      >
-                        View all catalog
-                      </StyledButton>
-                    </div>
-                  ) : (
-                    <div>
-                      <Typography
-                        variant="h5"
-                        sx={{ padding: "3rem 0 1rem 0", fontWeight: "bold" }}
-                      >
-                        Designs
-                      </Typography>
-                      <a
-                        href={
-                          user?.role_names?.includes(MESHMAP)
-                            ? "https://playground.meshery.io/extension/meshmap"
-                            : "https://play.meshery.io"
-                        }
-                        style={{ textDecoration: "none" }}
-                      >
-                        <PublishCard>
-                          <PublishIcon width={"60"} height={"60"} />
-                          <h5>Publish your own design</h5>
-                        </PublishCard>
-                      </a>
-                    </div>
-                  )}
-                </ExtensionWrapper>
-              </div>
-            </Grid>
-          </SectionWrapper>
-        )}
 
         <SectionWrapper>
           {isLoggedIn && (
@@ -795,20 +681,6 @@ const ExtensionsComponent = () => {
             </div>
           )}
         </SectionWrapper>
-
-        {/*
-
-        // Feedback component is comment currently because the api required to use this authentication error
-
-        <SistentThemeProviderWithoutBaseLine>
-          <FeedbackButton
-            containerStyles={{ zIndex: 10 }}
-            renderPosition="right-middle"
-            onSubmit={onSubmit}
-          />
-        </SistentThemeProviderWithoutBaseLine>
-
-        */}
       </ComponentWrapper>
     </DockerMuiThemeProvider>
   );
