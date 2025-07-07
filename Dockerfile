@@ -52,7 +52,7 @@ LABEL org.opencontainers.image.title="Kanvas" \
   </ul>" \
   com.docker.desktop.extension.icon="https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/master/assets/kanvas-mark-logo-light.svg" \
   com.docker.extension.publisher-url="https://layer5.io" \
-  com.docker.extension.categories="[\"INTEGRATION & DELIVERY\", \"DEVELOPER TOOLS\", \"MONITORING & OBSERVABILITY\"] \
+  com.docker.extension.categories="[\"kubernetes", \"cloud-deployment\", \"ci-cd\"]" \
   com.docker.extension.additional-urls="[{\"title\":\"Documentation\",\"url\":\"https://docs.layer5.io\"},{\"title\":\"Project\",\"url\":\"https://layer5.io\"},{\"title\":\"Slack\",\"url\":\"https://slack.meshery.io\"},{\"title\":\"Discussion Forum\",\"url\":\"https://layer5.io/community#community-forums\"}]"
 COPY --from=builder /backend/bin/service /
 COPY docker-compose.yaml .
