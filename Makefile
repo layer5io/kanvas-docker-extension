@@ -11,8 +11,8 @@ GO_BUILD=$(STATIC_FLAGS) go build -trimpath -ldflags=$(LDFLAGS)
 
 GIT_VERSION=$(shell git describe --tags `git rev-list --tags --max-count=1`)
 GIT_STRIPPED_VERSION=$(shell git describe --tags `git rev-list --tags --max-count=1` | cut -c 2-)
-GIT_REF=$(shell git symbolic-ref HEAD)
-RELEASE_CHANNEL=$(shell ./release_channel.sh)
+GIT_REF=$(shell git symbolic-ref HEAD 2>/dev/null || echo "refs/heads/main")
+RELEASE_CHANNEL=$(shell if [[ $(GIT_REF) == refs/tags* ]]; then echo "stable"; else echo "edge"; fi)
 
 release-channel:
 	GIT_VERSION=$(GIT_VERSION)
