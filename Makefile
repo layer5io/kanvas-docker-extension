@@ -1,6 +1,5 @@
-
-# include .github/build/Makefile.core.mk
-# include .github/build/Makefile.show-help.mk
+include .github/build/Makefile.core.mk
+include .github/build/Makefile.show-help.mk
 
 IMAGE?=layer5/kanvas-docker-extension:edge-latest
 NAME?=layer5/kanvas-docker-extension
