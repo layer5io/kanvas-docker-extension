@@ -1,6 +1,6 @@
 
-# include ../Makefile.core.mk
-# include ../Makefile.show-help.mk
+# include .github/build/Makefile.core.mk
+# include .github/build/Makefile.show-help.mk
 
 IMAGE?=layer5/kanvas-docker-extension:edge-latest
 NAME?=layer5/kanvas-docker-extension
@@ -21,7 +21,7 @@ release-channel:
 	GIT_REF=$(GIT_REF)
 	RELEASE_CHANNEL=$(RELEASE_CHANNEL)
 
-## Build the binary for the current platform
+## Build the vm binary for the current platform
 bin:
 	@echo "$(INFO_COLOR)Building...$(NO_COLOR)"
 	$(GO_BUILD) -o bin/service ./vm
@@ -30,6 +30,7 @@ bin:
 extension:
 	docker build --tag=$(IMAGE) --build-arg GIT_VERSION=$(GIT_VERSION) --build-arg GIT_STRIPPED_VERSION=$(GIT_STRIPPED_VERSION) .
 
+## Build extension container with no cache
 extension-no-cache:
 	docker build --tag=$(IMAGE) --no-cache --build-arg GIT_VERSION=$(GIT_VERSION) --build-arg GIT_STRIPPED_VERSION=$(GIT_STRIPPED_VERSION) .
 
