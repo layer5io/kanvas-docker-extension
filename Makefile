@@ -49,20 +49,27 @@ push-extension: prepare-buildx
 	--tag=$(IMAGE):$(RELEASE_CHANNEL)-$(GIT_VERSION)
 	--tag=$(GIT_VERSION) .
 
+## Build UI. Produce local package.
 ui-build:
 	cd ui/src; npm install; npm run build; cd ../..;
 
+## Run UI on local port
 ui:
 	cd ui/src; npm run start; cd ../..;
-# Make easier to debug the UI
+
+## Make easier to debug the UI
 link:
 	docker extension dev ui-source $(IMAGE) http://localhost:3000
 	docker extension dev debug $(NAME)
+
+## docker extension dev reset
 reset:
 	docker extension dev reset $(IMAGE)
 
+## docker extension install
 install-extension:
 	docker extension install $(IMAGE) --force
+
 
 remove-extension:
 	docker extension remove $(IMAGE) || true
