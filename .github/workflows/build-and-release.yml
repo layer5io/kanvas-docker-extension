@@ -46,6 +46,16 @@ jobs:
       - name: Checkout 🛎️ repo
         uses: actions/checkout@v4
 
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          RELEASE_NOTES=$(gh release create ${{ github.ref_name }} --generate-notes --repo ${{ github.repository }} | tail -n +2)  # Get generated release notes, excluding the first line
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "$RELEASE_NOTES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -81,5 +91,6 @@ jobs:
             GIT_STRIPPED_VERSION=${{env.GIT_STRIPPED_VERSION}}
             GIT_VERSION=${{env.GIT_VERSION}}
             RELEASE_CHANNEL=${{env.RELEASE_CHANNEL}}
-          tags: ${{ steps.meta.outputs.tags }}
+            RELEASE_NOTES=${{ env.RELEASE_NOTES }}
+          tags: ${{ steps.meta.outputs.tags }}, ${{ github.ref_name }}
           platforms: linux/amd64,linux/arm64
