@@ -37,8 +37,16 @@ LABEL org.opencontainers.image.title="Kanvas" \
         \"alt\": \"Kanvas Docker Extension\", \
         \"url\": \"https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/master/assets/docker-extension-home.png\" \
       },{ \
-        \"alt\": \"Kanvas Docker Extension\", \
-        \"url\": \"https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/master/assets/kanvas-designer.png\" \
+        \"alt\": \"Kanvas Designer\", \
+        \"url\": \"https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/master/assets/kanvas-designer-design-loaded.png\" \
+      } \
+      ,{ \
+        \"alt\": \"Kanvas Designer Light Mode\", \
+        \"url\": \"https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/master/assets/kanvas-designer-lightmode.png\" \
+      } \
+     ,{ \
+        \"alt\": \"Kanvas Designer \", \
+        \"url\": \"https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/master/assets/kanvas-designer-empty.png\" \
       } \
     ]" \
   com.docker.extension.detailed-description="\
