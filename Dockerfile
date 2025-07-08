@@ -28,6 +28,8 @@ FROM alpine
 ARG GIT_STRIPPED_VERSION
 ARG GIT_VERSION
 ARG RELEASE_CHANNEL
+ARG RELEASE_NOTES
+
 LABEL org.opencontainers.image.title="Kanvas" \
   org.opencontainers.image.description="Kanvas, the collaborative Kubernetes manager. Go multi-player as you design and operate your cloud native infrastructure with teammates." \
   org.opencontainers.image.vendor="Layer5, Inc." \
@@ -62,7 +64,7 @@ LABEL org.opencontainers.image.title="Kanvas" \
   com.docker.desktop.extension.icon="https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/master/assets/kanvas-mark-logo-light.svg" \
   com.docker.extension.publisher-url="https://layer5.io" \
   com.docker.extension.categories="kubernetes, cloud-deployment" \
-  com.docker.extension.changelog="<p>Extension changelog<ul> <li>Initial release</li></ul></p>" \
+  com.docker.extension.changelog="$RELEASE_NOTES" \
   com.docker.extension.additional-urls="[{\"title\":\"Documentation\",\"url\":\"https://docs.layer5.io\"},{\"title\":\"Project\",\"url\":\"https://layer5.io\"},{\"title\":\"Slack\",\"url\":\"https://slack.layer5.io\"},{\"title\":\"Discussion Forum\",\"url\":\"https://layer5.io/community#community-forums\"}]"
 COPY --from=builder /backend/bin/service /
 COPY docker-compose.yaml .
