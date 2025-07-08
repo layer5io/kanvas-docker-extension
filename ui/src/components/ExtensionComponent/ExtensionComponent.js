@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Button, Tooltip, Grid } from "@mui/material";
+import { Typography, Button, Tooltip } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 // import ConsulIcon from '../../img/SVGs/consulIcon'
 // import IstioIcon from '../../img/SVGs/IstioIcon'
 // import KumaIcon from '../../img/SVGs/kumaIcon'
 // import LinkerdIcon from '../../img/SVGs/linkerdIcon'
 import Tour from "../Walkthrough/Tour";
-import PublishIcon from "../../assets/design";
 import { Avatar } from "@mui/material";
 // import NginxIcon from '../../img/SVGs/nginxIcon'
 // import AppmeshIcon from '../../img/SVGs/appmeshIcon'
 // import CiliumIcon from '../../img/SVGs/ciliumIcon'
 // import TraefikIcon from '../../img/SVGs/traefikIcon'
-import Meshery from "../../img/SVGs/meshery";
-import KanvasIcon from "../../img/meshery-logo/CustomKanvasLogo";
+import Kanvas from "../../img/SVGs/Kanvas";
+import KanvasIcon from "../../img/kanvas-logo/CustomKanvasLogo";
 import { DockerMuiThemeProvider } from "@docker/docker-mui-theme";
 import CssBaseline from "@mui/material/CssBaseline";
 import { LoadComp } from "../LoadingComponent/LoadComp";
@@ -28,22 +28,49 @@ import {
   LogoutButton,
   StyledButton,
   StyledLink,
-  MeshModels,
-  PublishCard,
 } from "./styledComponents";
-import { MesheryAnimation } from "../MesheryAnimation/MesheryAnimation";
+import { KanvasAnimation } from "../KanvasAnimation/KanvasAnimation";
 import { randomApplicationNameGenerator } from "../../utils";
-import CatalogChart from "../Catalog/Chart";
 import {
-  CatalogCard,
-  FeedbackButton,
   SistentThemeProviderWithoutBaseLine,
 } from "@sistent/sistent";
 import {
-  MESHMAP,
   providerUrl,
   SELECTED_PROVIDER_NAME,
 } from "../utils/constants";
+
+// Fallback theme provider for when Docker extension themes aren't available
+const DockerMuiThemeProviderWithFallback = ({ children }) => {
+  const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  
+  // Check if Docker extension themes are available
+  if (window.__ddMuiV5Themes) {
+    try {
+      return React.createElement(DockerMuiThemeProvider, {}, children);
+    } catch (error) {
+      console.warn('Docker MUI theme provider failed, falling back to default theme:', error);
+    }
+  }
+  
+  // Fallback theme configuration
+  const fallbackTheme = createTheme({
+    palette: {
+      mode: isDarkMode ? 'dark' : 'light',
+      primary: {
+        main: '#00B39F',
+      },
+      secondary: {
+        main: '#00D3A9',
+      },
+      background: {
+        default: isDarkMode ? '#121212' : '#ffffff',
+        paper: isDarkMode ? '#1e1e1e' : '#ffffff',
+      },
+    },
+  });
+  
+  return React.createElement(ThemeProvider, { theme: fallbackTheme }, children);
+};
 
 const AuthenticatedMsg = "Authenticated";
 const UnauthenticatedMsg = "Unauthenticated";
@@ -211,7 +238,7 @@ const ExtensionsComponent = () => {
   //     )
   //   }
   // }, [meshAdapters])
-  const [mesheryVersion, setMesheryVersion] = useState(null);
+  const [KanvasVersion, setKanvasVersion] = useState(null);
 
   const logout = () => {
     fetch(proxyUrl + "/token", { method: httpDelete })
@@ -298,7 +325,7 @@ const ExtensionsComponent = () => {
           //   .catch(console.err)
           fetch(proxyUrl + "/api/system/version")
             .then((result) => result.text())
-            .then((result) => setMesheryVersion(JSON.parse(result)?.build))
+            .then((result) => setKanvasVersion(JSON.parse(result)?.build))
             .catch(console.error);
           fetch(`${providerUrl}/api/catalog/content/pattern`)
             .then((result) => result.text())
@@ -445,17 +472,17 @@ const ExtensionsComponent = () => {
   const OpenDocs = () => {
     // window.location.href = proxyUrl;
     window.ddClient.host.openExternal(
-      `https://docs.meshery.io/installation/docker/docker-extension`,
+      `https://docs.layer5.io/kanvas/`,
     );
   };
 
-  const launchMeshery = () => {
-    console.log("Launching Meshery...");
+  const launchKanvas = () => {
+    console.log("Launching Kanvas...");
     window.location.href = proxyUrl;
   };
 
   return (
-    <DockerMuiThemeProvider>
+    <DockerMuiThemeProviderWithFallback>
       <CssBaseline />
       {changing && (
         <LoadingDiv sx={{ opacity: "1" }}>
@@ -516,17 +543,17 @@ const ExtensionsComponent = () => {
                       onMouseOver={onMouseOver}
                     >
                       {isHovered ? (
-                        <MesheryAnimation height={70} width={72} />
+                        <KanvasAnimation height={70} width={72} />
                       ) : (
-                        <Meshery height={70} width={72} />
+                        <Kanvas height={70} width={72} />
                       )}
                     </div>
                   ) : (
-                    <Meshery height={70} width={72} />
+                    <Kanvas height={70} width={72} />
                   )}
                 </a>
                 {isLoggedIn ? (
-                  <LinkButton onClick={launchMeshery}>
+                  <LinkButton onClick={launchKanvas}>
                     <StyledLink
                       style={{ textDecoration: "none", color: "white" }}
                       // href={
@@ -536,7 +563,7 @@ const ExtensionsComponent = () => {
                       //     "&provider=${SELECTED_PROVIDER_NAME}`
                       // }
                     >
-                      Launch Meshery
+                      Launch Kanvas
                     </StyledLink>
                   </LinkButton>
                 ) : (
@@ -663,13 +690,13 @@ const ExtensionsComponent = () => {
         <SectionWrapper>
           {isLoggedIn && (
             <div style={{ paddingTop: isLoggedIn ? "1.2rem" : null }}>
-              <Tooltip title="Meshery Server version">
+              <Tooltip title="Kanvas Server version">
                 <VersionText variant="span" component="span" align="end">
-                  {mesheryVersion}
+                  {KanvasVersion}
                 </VersionText>
               </Tooltip>
               <a
-                href={`https://docs.meshery.io/project/releases/${mesheryVersion}`}
+                href={`https://docs.Kanvas.io/project/releases/${KanvasVersion}`}
                 target="_blank"
                 rel="noreferrer"
                 style={{ color: isDarkTheme ? "white" : "black" }}
@@ -682,7 +709,7 @@ const ExtensionsComponent = () => {
           )}
         </SectionWrapper>
       </ComponentWrapper>
-    </DockerMuiThemeProvider>
+    </DockerMuiThemeProviderWithFallback>
   );
 };
 
