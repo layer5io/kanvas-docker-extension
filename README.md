@@ -49,14 +49,8 @@ The Docker Extension for Kanvas extends Docker Desktop’s position as the cloud
 
 <p align="center"><a href="https://raw.githubusercontent.com/meshery/meshery/master/install/docker-extension/docs/img/docker-desktop-extension-for-meshery.png"><img src="https://raw.githubusercontent.com/meshery/meshery/master/install/docker-extension/docs/img/docker-desktop-extension-for-meshery.png" width="90%" align="center" /></a></p>
 
-## Docker Extension for Kanvas Architecture
 
-The Docker Extension for Kanvas deploys Kanvas to your local Docker host as a Docker Compose application.
-
-<p align="center"><a href="https://raw.githubusercontent.com/meshery/meshery/master/install/docker-extension/docs/img/docker-extension-for-meshery-architecture.png"><img src="https://raw.githubusercontent.com/meshery/meshery/master/install/docker-extension/docs/img/docker-extension-for-meshery-architecture.png" width="90%" align="center" /></a></p>
-Learn more about <a href="https://docs.layer5.io/kanvas">Kanvas's architecture</a>.
-
-## Docker Extension for Kanvas
+## Contributing
 
 From `/install/docker-extension`, familiarize with available `make` targets by executing:
 
