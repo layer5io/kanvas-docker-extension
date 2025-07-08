@@ -47,20 +47,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Identify Release Values
         if: "${{ github.event.inputs.release-ver}} != 'v' }}"
         run: |
           # GIT_REF=`git symbolic-ref HEAD`
           if [[ $GIT_TAG = refs/tags* ]]
           then
-            echo RELEASE_CHANNEL=stable >> $GITHUB_ENV
+            echo "RELEASE_CHANNEL=stable" >> $GITHUB_ENV
           else
-            echo RELEASE_CHANNEL=edge >> $GITHUB_ENV
+            echo "RELEASE_CHANNEL=edge" >> $GITHUB_ENV
           fi
           echo "Release channel determined to be $RELEASE_CHANNEL"
-          LATEST_VERSION=$(git ls-remote --tags | tail -1 | cut -f2 | sed 's/refs\/tags\///g') >> $GITHUB_ENV
-          GIT_VERSION=$(git ls-remote --tags | tail -1 | cut -f2 | sed 's/refs\/tags\///g') >> $GITHUB_ENV
+          LATEST_VERSION=$(git ls-remote --tags | tail -1 | cut -f2 | sed 's/refs\/tags\///g')
+          GIT_VERSION=$(git ls-remote --tags | tail -1 | cut -f2 | sed 's/refs\/tags\///g')
           # GIT_VERSION=$(git describe --tags `git rev-list --tags --max-count=1` --always)
           GIT_STRIPPED_VERSION=$(git ls-remote --tags | tail -1 | cut -f2 | sed 's/refs\/tags\///g' | cut -c2-)
           echo "GIT_LATEST=$LATEST_VERSION" >> $GITHUB_ENV
@@ -69,12 +69,12 @@ jobs:
         shell: bash
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
+        uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
       - name: Docker Meta
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v5
         with:
           images: layer5/kanvas-docker-extension
           flavor: |
@@ -87,12 +87,12 @@ jobs:
             type=raw,value=${{env.RELEASE_CHANNEL}}-latest
             type=semver,pattern={{version}},value=${{env.RELEASE_CHANNEL}}-${{env.GIT_VERSION}},enable=${{ startsWith(github.ref, 'refs/tags/v') }}
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build and Push
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v5
         with:
           context: "{{defaultContext}}"
           push: true
@@ -102,10 +102,10 @@ jobs:
             RELEASE_CHANNEL=${{env.RELEASE_CHANNEL}}
           tags: ${{ steps.meta.outputs.tags }}
           platforms: linux/amd64,linux/arm64
-      - name: Docker Hub Description
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: layer5/kanvas-docker-extension
-          readme-filepath: README.md
+      # - name: Docker Hub Description
+      #   uses: peter-evans/dockerhub-description@v3
+      #   with:
+      #     username: ${{ secrets.DOCKER_USERNAME }}
+      #     password: ${{ secrets.DOCKER_PASSWORD }}
+      #     repository: layer5/kanvas-docker-extension
+      #     readme-filepath: README.md
