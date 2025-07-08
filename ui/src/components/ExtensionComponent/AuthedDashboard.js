@@ -28,7 +28,7 @@ import {
   Box,
 } from "@sistent/sistent";
 
-import KanvasGreen from "../../img/SVGs/KanvasGreen";
+import KanvasGreen from "../../img/SVGs/kanvasGreen";
 import DocsIcon from "../../img/SVGs/docsIcon";
 import KanvasHorizontalLight from "../../img/SVGs/KanvasHorizontalLight";
 

@@ -3,6 +3,6 @@ export function trueRandom() {
 }
 
 export function randomApplicationNameGenerator() {
-    return "meshery_compose_" + Math.floor(trueRandom() * 100);
+    return "kanvas-design-" + Math.floor(trueRandom() * 100);
 }
 
