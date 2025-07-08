@@ -15,11 +15,11 @@ const TOUR_STEPS = [
     target: ".second-step",
     title:"Import your docker compose apps",
     content:
-    <i>Import your Docker Compose apps. Configure and deploy them to Kubernetes and any service mesh.</i>,
+    <i>Import your Docker Compose apps. Configure and deploy them to Kubernetes and any public cloud provider.</i>,
   },
   {
     target: ".third-step",
-    title:"Open Meshery",
+    title:"Open Kanvas",
     placement: "top",
     content: <i>Launch Meshery to  visualize and design your Docker Compose applications, run performance tests and much more.</i>
   },
