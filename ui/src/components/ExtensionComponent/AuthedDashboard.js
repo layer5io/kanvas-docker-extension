@@ -26,9 +26,10 @@ import {
   InfoCircleIcon,
   CustomTooltip,
   Box,
+  CircularProgress,
 } from "@sistent/sistent";
 
-import kanvasColor from "../../img/SVGs/kanvasColor";
+import KanvasColor from "../../img/SVGs/kanvasColor";
 import DocsIcon from "../../img/SVGs/docsIcon";
 import KanvasHorizontalLight from "../../img/SVGs/KanvasHorizontalLight";
 
@@ -89,22 +90,32 @@ const HeaderSection = ({ isDarkTheme }) => (
   </MuiBox>
 );
 
-const LaunchKanvasSection = ({ isDarkTheme }) => (
-  <ExtensionWrapper
-    sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
-  >
-    <AccountDiv>
-      <kanvasColor height={70} width={72} style={{ marginBottom: "1rem" }} />
-      <StyledButton
-        variant="contained"
-        component="span"
-        onClick={() => (window.location.href = proxyUrl)}
-      >
-        <StyledLink style={{ color: "white" }}>Launch Kanvas</StyledLink>
-      </StyledButton>
-    </AccountDiv>
-  </ExtensionWrapper>
-);
+const LaunchKanvasSection = ({ isDarkTheme }) => {
+  const [launching, setLaunching] = useState(false);
+
+  return (
+    <ExtensionWrapper
+      sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
+    >
+      <AccountDiv>
+        <KanvasColor height={70} width={72} style={{ marginBottom: "1rem" }} />
+        <StyledButton
+          variant="contained"
+          component="span"
+          onClick={() => {
+            window.location.href = proxyUrl + "/extension/meshmap";
+            setLaunching(true);
+          }}
+        >
+          <MuiBox display={"flex"} gap={2} alignItems="center">
+            {launching && <CircularProgress color="#eee" size="24" />}
+            <StyledLink style={{ color: "white" }}>Launch Kanvas</StyledLink>
+          </MuiBox>
+        </StyledButton>
+      </AccountDiv>
+    </ExtensionWrapper>
+  );
+};
 
 const ImportDesignSection = ({ isDarkTheme }) => {
   const handleImport = async (e) => {
