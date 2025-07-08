@@ -14,7 +14,7 @@
 <a href="https://goreportcard.com/report/github.com/layer5io/layer5" alt="Go Report Card">
   <img src="https://goreportcard.com/badge/github.com/layer5io/layer5" /></a>
 <a href="https://github.com/layer5io/docs/actions" alt="Build Status">
-  <img src="https://img.shields.io/github/workflow/status/meshery/meshery/Kanvas%20Build%20and%20Releaser%20(edge)" /></a>
+  <img src="https://img.shields.io/github/actions/workflow/status/layer5io/kanvas-docker-extension/release-drafter.yml" /></a>
 <a href="https://bestpractices.coreinfrastructure.org/projects/3564" alt="CLI Best Practices">
   <img src="https://bestpractices.coreinfrastructure.org/projects/3564/badge" /></a>
 <a href="https://discuss.layer5.io" alt="Discuss Users">
