@@ -16,6 +16,13 @@ export const AccountDiv = styled('div')(() => ({
   justifyContent: 'center', alignItems: 'center',
 }));
 
+
+export const IconWrapper = styled('div')(({ theme }) => ({
+  paddingInline: '2rem',
+  paddingTop: '1rem',
+  alignSelf: 'flex-end',
+}));
+
 export const ServiceMeshAdapters = styled('div')(({ theme }) => ({
   display: "flex",
   alignItems: 'center',

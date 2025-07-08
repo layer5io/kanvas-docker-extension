@@ -1,6 +1,6 @@
 import React from "react";
 
-const KanvaHorizontalLight = ({ height = 500, width = 2300, ...props }) => {
+const KanvasHorizontalLight = ({ height = 500, width = 2300, ...props }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -33,4 +33,4 @@ const KanvaHorizontalLight = ({ height = 500, width = 2300, ...props }) => {
   );
 };
 
-export default KanvaHorizontalLight;
+export default KanvasHorizontalLight;

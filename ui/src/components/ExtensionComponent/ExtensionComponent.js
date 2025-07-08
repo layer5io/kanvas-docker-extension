@@ -4,7 +4,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import Tour from "../Walkthrough/Tour";
 import { Avatar } from "@mui/material";
-import KanvasWhite from "../../img/SVGs/kanvasWhite";
+import KanvasGreen from "../../img/SVGs/KanvasGreen";
 import DocsIcon from "../../img/SVGs/docsIcon";
 import KanvasHorizontalLight from "../../img/SVGs/KanvasHorizontalLight";
 import KanvasIcon from "../../img/kanvas-logo/CustomKanvasLogo";
@@ -26,7 +26,7 @@ import {
 import { KanvasAnimation } from "../KanvasAnimation/KanvasAnimation";
 import { randomApplicationNameGenerator } from "../../utils";
 import {
-  SistentThemeProviderWithoutBaseLine,
+  SistentThemeProviderWithoutBaseLine, InfoCircleIcon, CustomTooltip, IconWrapper
 } from "@sistent/sistent";
 import {
   providerUrl,
@@ -453,12 +453,12 @@ const ExtensionsComponent = () => {
       if (!res.ok) throw new Error("Upload failed");
 
       window.ddClient.desktopUI.toast.success(
-        `Compose file has been uploaded with name: ${name}`,
+        `Design file has been uploaded with name: ${name}`,
       );
     } catch (err) {
       console.error("Error uploading file:", err);
       window.ddClient.desktopUI.toast.error(
-        "Some error occurred while uploading the compose file.",
+        "Some error occurred while uploading the design file.",
       );
     }
   };
@@ -541,11 +541,11 @@ const ExtensionsComponent = () => {
                       {isHovered ? (
                         <KanvasAnimation height={70} width={72} />
                       ) : (
-                        <KanvasWhite height={70} width={72} />
+                        <KanvasGreen height={70} width={72} />
                       )}
                     </div>
                   ) : (
-                    <KanvasWhite height={70} width={72} />
+                    <KanvasGreen height={70} width={72} />
                   )}
                 </a>
                 {isLoggedIn ? (
@@ -598,9 +598,9 @@ const ExtensionsComponent = () => {
                 <Typography
                   sx={{ marginBottom: "2rem", whiteSpace: " nowrap" }}
                 >
-                  Import Compose App
+                  Import Design File
                 </Typography>
-                <div style={{ paddingBottom: "2rem" }}>
+                <div style={{ paddingBottom: "1rem" }}>
                   <label htmlFor="upload-button">
                     <StyledButton
                       variant="contained"
@@ -620,6 +620,12 @@ const ExtensionsComponent = () => {
                       Browse...
                     </StyledButton>
                   </label>
+                  <CustomTooltip title="Supported file types include Kubernetes manifests, Helm charts, Kustomize, and Docker Compose. Learn more at https://docs.kanvas.new">
+                         <IconWrapper>
+
+                    <InfoCircleIcon style={{ minWidth: 'auto', padding: '4px' }} />
+                    </IconWrapper>
+                  </CustomTooltip>
                 </div>
               </AccountDiv>
             </ExtensionWrapper>
