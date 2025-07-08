@@ -2,17 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Typography, Button, Tooltip } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-// import ConsulIcon from '../../img/SVGs/consulIcon'
-// import IstioIcon from '../../img/SVGs/IstioIcon'
-// import KumaIcon from '../../img/SVGs/kumaIcon'
-// import LinkerdIcon from '../../img/SVGs/linkerdIcon'
 import Tour from "../Walkthrough/Tour";
 import { Avatar } from "@mui/material";
-// import NginxIcon from '../../img/SVGs/nginxIcon'
-// import AppmeshIcon from '../../img/SVGs/appmeshIcon'
-// import CiliumIcon from '../../img/SVGs/ciliumIcon'
-// import TraefikIcon from '../../img/SVGs/traefikIcon'
-import Kanvas from "../../img/SVGs/Kanvas";
+import KanvasWhite from "../../img/SVGs/kanvasWhite";
+import DocsIcon from "../../img/SVGs/docsIcon";
+import KanvasHorizontalLight from "../../img/SVGs/KanvasHorizontalLight";
 import KanvasIcon from "../../img/kanvas-logo/CustomKanvasLogo";
 import { DockerMuiThemeProvider } from "@docker/docker-mui-theme";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -495,13 +489,15 @@ const ExtensionsComponent = () => {
             size="small"
             onClick={() => OpenDocs()}
             style={{
+              backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE",
               position: "absolute",
-              top: "-8px",
-              right: "55px",
+              top: "1rem",
+              right: "1rem",
             }}
           >
-            Docs
+          <DocsIcon width="24" height="24" CustomColor={isDarkTheme ? "white" : "#3C494F"}  alt="Docs" />&nbsp;Docs
           </StyledButton>
+          
         </SistentThemeProviderWithoutBaseLine>
         {isLoggedIn && <Tour />}
         <div
@@ -511,9 +507,9 @@ const ExtensionsComponent = () => {
           }}
         >
           <div>
-            <KanvasIcon CustomColor={isDarkTheme ? "white" : "#3C494F"} />
+            <KanvasHorizontalLight width="600" height="auto" CustomColor={isDarkTheme ? "white" : "#3C494F"} />
 
-            <Typography sx={{ margin: "auto", paddingTop: "1rem" }}>
+            <Typography sx={{ margin: "auto", paddingTop: "-1rem" }}>
               Design and operate your cloud native deployments with Kanvas.
             </Typography>
           </div>
@@ -545,11 +541,11 @@ const ExtensionsComponent = () => {
                       {isHovered ? (
                         <KanvasAnimation height={70} width={72} />
                       ) : (
-                        <Kanvas height={70} width={72} />
+                        <KanvasWhite height={70} width={72} />
                       )}
                     </div>
                   ) : (
-                    <Kanvas height={70} width={72} />
+                    <KanvasWhite height={70} width={72} />
                   )}
                 </a>
                 {isLoggedIn ? (
