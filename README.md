@@ -1,7 +1,7 @@
 <p style="text-align:center;" align="center"><a href="https://layer5.io/kanvas"><picture align="center">
-  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/layer5io/layer5/blob/master/.github/assets/images/kanvas/meshery-logo-dark-text-side.svg"  width="70%" align="center" style="margin-bottom:20px;">
-  <source media="(prefers-color-scheme: light)" srcset="https://github.com/layer5io/layer5/blob/master/.github/assets/images/kanvas/meshery-logo-light-text-side.svg" width="70%" align="center" style="margin-bottom:20px;">
-  <img alt="Shows an illustrated light mode meshery logo in light color mode and a dark mode Kanvas logo in dark color mode." src="https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/master/.github/assets/images/kanvas/meshery-logo-tag-light-text-side.png" width="70%" align="center" style="margin-bottom:20px;">
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/layer5io/layer5/blob/master/ui/src/img/kanvas/horizontal/kanvas-horizontal-color.svg"  width="70%" align="center" style="margin-bottom:20px;">
+  <source media="(prefers-color-scheme: light)" srcset="https://github.com/layer5io/layer5/blob/master/ui/src/img/kanvas/horizontal/kanvas-horizontal-partial-color.svg" width="70%" align="center" style="margin-bottom:20px;">
+  <img alt="Shows an illustrated light mode meshery logo in light color mode and a dark mode Kanvas logo in dark color mode." src="https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/master/ui/src/img/kanvas/horizontal/kanvas-horizontal-partial-color.svg" width="70%" align="center" style="margin-bottom:20px;">
 </picture></a><br /><br /></p>
 
 <p align="center">
