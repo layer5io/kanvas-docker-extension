@@ -95,7 +95,11 @@ const LaunchKanvasSection = ({ isDarkTheme }) => (
   >
     <AccountDiv>
       <kanvasColor height={70} width={72} style={{ marginBottom: "1rem" }} />
-      <StyledButton variant="contained" component="span" onClick={() => (window.location.href = proxyUrl)}>
+      <StyledButton
+        variant="contained"
+        component="span"
+        onClick={() => (window.location.href = proxyUrl)}
+      >
         <StyledLink style={{ color: "white" }}>Launch Kanvas</StyledLink>
       </StyledButton>
     </AccountDiv>
@@ -162,7 +166,7 @@ const ImportDesignSection = ({ isDarkTheme }) => {
             <input
               id="upload-button"
               type="file"
-              accept=".yaml, .yml"
+              accept=".yaml, .yml, .json, .zip, .tar , .tar.gz"
               hidden
               onChange={handleImport}
             />
@@ -217,19 +221,8 @@ const UserAccountSection = ({ isDarkTheme }) => {
     const fetchUserAndVersion = async () => {
       try {
         const userRes = await fetch(`${proxyUrl}/api/user`);
-        console.log("user Res", userRes);
-        // fetch(`${proxyUrl}/api/system/version`),
-        const j = await userRes.json();
-
-        console.log("json", j);
-
-        const user = JSON.parse(await userRes.text());
-
-        console.log("user", user);
-        // const version = JSON.parse(await versionRes.text());
-
+        const user = await userRes.json();
         setUser(user);
-        // setKanvasVersion(version?.build || "");
       } catch (err) {
         console.error("Error fetching user or version:", err);
       }
@@ -248,6 +241,7 @@ const UserAccountSection = ({ isDarkTheme }) => {
     }
   };
 
+  console.log("user", user);
   // if (!user) return null;
 
   return (
