@@ -68,6 +68,16 @@ jobs:
           echo "GIT_STRIPPED_VERSION=$GIT_STRIPPED_VERSION" >> $GITHUB_ENV
         shell: bash
 
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          RELEASE_NOTES=$(gh release create ${{ github.ref_name }} --generate-notes --repo ${{ github.repository }} | tail -n +2)  # Get generated release notes, excluding the first line
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "$RELEASE_NOTES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
