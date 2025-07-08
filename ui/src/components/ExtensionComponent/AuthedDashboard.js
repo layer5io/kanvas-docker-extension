@@ -33,7 +33,7 @@ import KanvasHorizontalLight from "../../img/SVGs/KanvasHorizontalLight";
 
 import { randomApplicationNameGenerator } from "../../utils";
 import { getBase64EncodedFile, getUnit8ArrayDecodedFile } from "../utils/file";
-import RecentDesignsCard from "./RecentDesigns";
+import RecentDesignsCard, { refreshRecentDesignsEvent } from "./RecentDesigns";
 
 const proxyUrl = "http://127.0.0.1:7877";
 
@@ -127,6 +127,9 @@ const ImportDesignSection = ({ isDarkTheme }) => {
       });
 
       if (!res.ok) throw new Error("Upload failed");
+      // refresh recent designs
+      document.dispatchEvent(refreshRecentDesignsEvent);
+
       window.ddClient.desktopUI.toast.success(`Design uploaded as: ${name}`);
     } catch (err) {
       console.error("Import error:", err);

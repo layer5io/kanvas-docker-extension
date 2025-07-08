@@ -18,13 +18,22 @@ import { DesignIcon } from "@sistent/sistent";
 import { getFormatDate } from "@sistent/sistent";
 import { SectionCard } from "./styledComponents";
 import { ProxyUrl } from "../utils/constants";
+import { useCallback } from "react";
+
+export const REFRESH_RECENT_DESIGNS_EVENT = "refreshRecentDesigns";
+
+// Create a custom event with optional detail payload
+export const refreshRecentDesignsEvent = new CustomEvent(
+  REFRESH_RECENT_DESIGNS_EVENT,
+  {},
+);
 
 export default function RecentDesignsCard({ isDarkTheme }) {
   const [designs, setDesigns] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  useEffect(() => {
+  const fetchRecentDesigns = useCallback(() => {
+    setLoading(true);
     fetch(ProxyUrl + "/api/pattern?page=0&pagesize=10&search=&order=updated_at") // Replace with your actual API endpoint
       .then(async (res) => {
         if (!res.ok) {
@@ -43,6 +52,29 @@ export default function RecentDesignsCard({ isDarkTheme }) {
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    fetchRecentDesigns();
+  }, [fetchRecentDesigns]);
+
+  useEffect(() => {
+    document.addEventListener(REFRESH_RECENT_DESIGNS_EVENT, fetchRecentDesigns);
+
+    return () =>
+      document.removeEventListener(
+        REFRESH_RECENT_DESIGNS_EVENT,
+        fetchRecentDesigns,
+      );
+  }, [fetchRecentDesigns]);
+
+  const openDesign = (design) => {
+    const name = design.name.replace(" ", "-").toLowerCase();
+    // const url = `http://localhost:9081/extension/meshmap?mode=design&design=${design.id}`;
+    const url = `https://cloud.layer5.io/catalog/content/my-designs/${name}-${design.id}?source=%257B%2522type%2522%253A%2522my-designs%2522%257D`;
+
+    window.ddClient.host.openExternal(url);
+    // window.location.href = url;
+  };
 
   return (
     <SectionCard
@@ -68,9 +100,9 @@ export default function RecentDesignsCard({ isDarkTheme }) {
                 key={design.id}
                 secondaryAction={
                   <IconButton
+                    onClick={() => openDesign(design)}
                     edge="end"
                     aria-label="open"
-                    href={`/designs/${design.id}`}
                   >
                     <OpenInNewIcon />
                   </IconButton>
