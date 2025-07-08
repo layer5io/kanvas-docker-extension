@@ -18,6 +18,7 @@ import {
   VersionText,
   StyledButton,
   StyledLink,
+  IconWrapper,
 } from "./styledComponents";
 
 import {
@@ -146,11 +147,14 @@ const ImportDesignSection = ({ isDarkTheme }) => {
           display="flex"
           justifyContent="space-between"
           alignItems="center"
+          gap={1}
           mb={2}
         >
           <Typography whiteSpace="nowrap">Import Design File</Typography>
           <CustomTooltip title="Supported formats: Helm, K8s, Kustomize, Docker Compose">
-            <InfoCircleIcon height={24} width={24} />
+            <div>
+              <InfoCircleIcon height={24} width={24} />
+            </div>
           </CustomTooltip>
         </Box>
         <label htmlFor="upload-button">
