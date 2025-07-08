@@ -54,7 +54,7 @@ jobs:
 
       - name: Docker Meta
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v5
         with:
           images: layer5/kanvas-docker-extension
           flavor: |
