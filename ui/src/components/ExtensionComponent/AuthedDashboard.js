@@ -1,5 +1,14 @@
 import { useState, useEffect } from "react";
-import { Typography, Button, Avatar, Box as MuiBox } from "@mui/material";
+import {
+  Typography,
+  Button,
+  Avatar,
+  IconButton,
+  Box as MuiBox,
+  Tooltip,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import {
@@ -26,6 +35,7 @@ import KanvasHorizontalLight from "../../img/SVGs/KanvasHorizontalLight";
 
 import { randomApplicationNameGenerator } from "../../utils";
 import { getBase64EncodedFile, getUnit8ArrayDecodedFile } from "../utils/file";
+import RecentDesignsCard from "./RecentDesigns";
 
 const proxyUrl = "http://127.0.0.1:7877";
 
@@ -37,9 +47,6 @@ const DocsButton = ({ isDarkTheme, onClick }) => (
     onClick={onClick}
     style={{
       backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE",
-      position: "absolute",
-      top: "1rem",
-      right: "1rem",
     }}
   >
     <DocsIcon
@@ -52,16 +59,33 @@ const DocsButton = ({ isDarkTheme, onClick }) => (
 );
 
 const HeaderSection = ({ isDarkTheme }) => (
-  <MuiBox display="flex" justifyContent="center" mb={2}>
-    <MuiBox textAlign="center">
-      <KanvasHorizontalLight
-        width="600"
-        height="auto"
-        CustomColor={isDarkTheme ? "white" : "#3C494F"}
+  <MuiBox>
+    <MuiBox
+      display="flex"
+      justifyContent={"end"}
+      gap={2}
+      alignItems={"center"}
+      mb={2}
+    >
+      <DocsButton
+        isDarkTheme={isDarkTheme}
+        onClick={() =>
+          window.ddClient.host.openExternal("https://docs.layer5.io/kanvas/")
+        }
       />
-      <Typography>
-        Design and operate your cloud native deployments with Kanvas.
-      </Typography>
+      <UserAccountSection isDarkTheme={isDarkTheme} />
+    </MuiBox>
+    <MuiBox display="flex" justifyContent="center" mb={2}>
+      <MuiBox textAlign="center">
+        <KanvasHorizontalLight
+          width="600"
+          height="auto"
+          CustomColor={isDarkTheme ? "white" : "#3C494F"}
+        />
+        <Typography>
+          Design and operate your cloud native deployments with Kanvas.
+        </Typography>
+      </MuiBox>
     </MuiBox>
   </MuiBox>
 );
@@ -145,12 +169,25 @@ const ImportDesignSection = ({ isDarkTheme }) => {
   );
 };
 
-const VersionInfoSection = ({ kanvasVersion, isDarkTheme }) => (
-  <MuiBox pt={1.2} display="flex" alignItems="center" gap={1}>
-    <CustomTooltip title="Kanvas Server Version">
-      <VersionText>{kanvasVersion}</VersionText>
-    </CustomTooltip>
-    {kanvasVersion && (
+const VersionInfoSection = ({ isDarkTheme }) => {
+  const [kanvasVersion, setVersion] = useState("");
+
+  useEffect(() => {
+    const fetchVersion = () => {
+      fetch(proxyUrl + "/api/system/version")
+        .then((result) => result.text())
+        .then((result) => setVersion(JSON.parse(result)?.build))
+        .catch(console.error);
+    };
+
+    fetchVersion();
+  }, []);
+
+  return (
+    <MuiBox pt={1.2} display="flex" alignItems="center" gap={1}>
+      <CustomTooltip title="Kanvas Server Version">
+        <VersionText>{kanvasVersion}</VersionText>
+      </CustomTooltip>
       <a
         href={`https://docs.Kanvas.io/project/releases/${kanvasVersion}`}
         target="_blank"
@@ -159,27 +196,35 @@ const VersionInfoSection = ({ kanvasVersion, isDarkTheme }) => (
       >
         <OpenInNewIcon sx={{ width: "0.85rem", verticalAlign: "middle" }} />
       </a>
-    )}
-  </MuiBox>
-);
+    </MuiBox>
+  );
+};
 
 const UserAccountSection = ({ isDarkTheme }) => {
-  const [user, setUser] = useState(null);
-  const [kanvasVersion, setKanvasVersion] = useState("");
+  const [user, setUser] = useState({});
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const open = Boolean(anchorEl);
+  const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
+  const handleMenuClose = () => setAnchorEl(null);
 
   useEffect(() => {
     const fetchUserAndVersion = async () => {
       try {
-        const [userRes, versionRes] = await Promise.all([
-          fetch(`${proxyUrl}/api/user`),
-          fetch(`${proxyUrl}/api/system/version`),
-        ]);
+        const userRes = await fetch(`${proxyUrl}/api/user`);
+        console.log("user Res", userRes);
+        // fetch(`${proxyUrl}/api/system/version`),
+        const j = await userRes.json();
+
+        console.log("json", j);
 
         const user = JSON.parse(await userRes.text());
-        const version = JSON.parse(await versionRes.text());
+
+        console.log("user", user);
+        // const version = JSON.parse(await versionRes.text());
 
         setUser(user);
-        setKanvasVersion(version?.build || "");
+        // setKanvasVersion(version?.build || "");
       } catch (err) {
         console.error("Error fetching user or version:", err);
       }
@@ -192,38 +237,43 @@ const UserAccountSection = ({ isDarkTheme }) => {
     try {
       await fetch(`${proxyUrl}/token`, { method: "DELETE" });
       console.log("Logged out");
+      handleMenuClose();
     } catch (err) {
       console.error("Logout error:", err);
     }
   };
 
+  // if (!user) return null;
+
   return (
-    <ExtensionWrapper
-      sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
-    >
-      <AccountDiv>
-        {user?.user_id && (
-          <MuiBox display="flex" flexDirection="column" alignItems="center">
-            <Typography mb={2}>{user.user_id}</Typography>
-            <Avatar
-              src={user.avatar_url}
-              sx={{ width: 80, height: 80, mb: 2 }}
-            />
-          </MuiBox>
-        )}
-        <LogoutButton>
-          <Button onClick={logout} color="secondary" variant="contained">
-            Logout
-          </Button>
-        </LogoutButton>
-        <MuiBox pt={2}>
-          <VersionInfoSection
-            kanvasVersion={kanvasVersion}
-            isDarkTheme={isDarkTheme}
-          />
-        </MuiBox>
-      </AccountDiv>
-    </ExtensionWrapper>
+    <>
+      <Tooltip title={user.user_id}>
+        <IconButton onClick={handleMenuOpen} size="small" sx={{ ml: 2 }}>
+          <Avatar src={user.avatar_url} sx={{ width: 40, height: 40 }} />
+        </IconButton>
+      </Tooltip>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleMenuClose}
+        onClick={handleMenuClose}
+        slotProps={{
+          paper: {
+            elevation: 2,
+            sx: {
+              mt: 1.5,
+              minWidth: 180,
+              backgroundColor: isDarkTheme ? "#eee" : "#D7DADE",
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        <MenuItem onClick={logout}>Logout</MenuItem>
+      </Menu>
+    </>
   );
 };
 
@@ -234,12 +284,6 @@ export const Dasboard = ({ isDarkMode }) => {
 
   return (
     <SistentThemeProviderWithoutBaseLine>
-      <DocsButton
-        isDarkTheme={isDarkTheme}
-        onClick={() =>
-          window.ddClient.host.openExternal("https://docs.layer5.io/kanvas/")
-        }
-      />
       <HeaderSection isDarkTheme={isDarkTheme} />
       <SectionWrapper
         sx={{
@@ -251,8 +295,9 @@ export const Dasboard = ({ isDarkMode }) => {
       >
         <LaunchKanvasSection isDarkTheme={isDarkTheme} />
         <ImportDesignSection isDarkTheme={isDarkTheme} />
-        <UserAccountSection isDarkTheme={isDarkTheme} />
+        <RecentDesignsCard isDarkTheme={isDarkMode} />
       </SectionWrapper>
+      <VersionInfoSection isDarkTheme={isDarkMode} />
     </SistentThemeProviderWithoutBaseLine>
   );
 };

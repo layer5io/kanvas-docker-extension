@@ -16,6 +16,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { DesignIcon } from "@sistent/sistent";
 
 import { getFormatDate } from "@sistent/sistent";
+import { SectionCard } from "./styledComponents";
 
 const sampleResp = [
   {
@@ -28,9 +29,19 @@ const sampleResp = [
     name: "Mobile App UI",
     updatedAt: "2025-07-07T15:12:00Z",
   },
+  {
+    id: "3",
+    name: "Mobile App UI",
+    updatedAt: "2025-07-07T15:12:00Z",
+  },
+  {
+    id: "4",
+    name: "Mobile App UI",
+    updatedAt: "2025-07-07T15:12:00Z",
+  },
 ];
 
-export default function RecentDesignsCard() {
+export default function RecentDesignsCard({ isDarkTheme }) {
   const [designs, setDesigns] = useState(sampleResp);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -56,7 +67,10 @@ export default function RecentDesignsCard() {
   }, []);
 
   return (
-    <Card sx={{ maxWidth: 500, margin: "auto" }}>
+    <SectionCard
+      isDarkTheme={isDarkTheme}
+      sx={{ flexDirection: "column", pt: "0.5rem", pb: "0.5rem" }}
+    >
       <CardHeader title="Recent Designs" />
       <CardContent>
         {loading ? (
@@ -96,6 +110,6 @@ export default function RecentDesignsCard() {
           </List>
         )}
       </CardContent>
-    </Card>
+    </SectionCard>
   );
 }
