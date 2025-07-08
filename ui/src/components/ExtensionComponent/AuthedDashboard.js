@@ -1,11 +1,7 @@
 import { useState, useEffect } from "react";
-import { Typography, Button } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Typography, Button, Avatar, Box as MuiBox } from "@mui/material";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { Avatar } from "@mui/material";
-import KanvasGreen from "../../img/SVGs/KanvasGreen";
-import DocsIcon from "../../img/SVGs/docsIcon";
-import KanvasHorizontalLight from "../../img/SVGs/KanvasHorizontalLight";
+
 import {
   AccountDiv,
   ExtensionWrapper,
@@ -16,304 +12,247 @@ import {
   StyledButton,
   StyledLink,
 } from "./styledComponents";
-import { randomApplicationNameGenerator } from "../../utils";
+
 import {
   SistentThemeProviderWithoutBaseLine,
   InfoCircleIcon,
   CustomTooltip,
   Box,
-  // CustomTooltip,
 } from "@sistent/sistent";
-import { SELECTED_PROVIDER_NAME } from "../utils/constants";
+
+import KanvasGreen from "../../img/SVGs/KanvasGreen";
+import DocsIcon from "../../img/SVGs/docsIcon";
+import KanvasHorizontalLight from "../../img/SVGs/KanvasHorizontalLight";
+
+import { randomApplicationNameGenerator } from "../../utils";
 import { getBase64EncodedFile, getUnit8ArrayDecodedFile } from "../utils/file";
 
 const proxyUrl = "http://127.0.0.1:7877";
-const httpDelete = "DELETE";
 
-export const Dasboard = ({ isDarkMode, token }) => {
-  const isDarkTheme = isDarkMode;
-  const [user, setUser] = useState("");
+// ─────── UI Components ───────────────────────────────
 
-  const [KanvasVersion, setKanvasVersion] = useState(null);
+const DocsButton = ({ isDarkTheme, onClick }) => (
+  <StyledButton
+    size="small"
+    onClick={onClick}
+    style={{
+      backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE",
+      position: "absolute",
+      top: "1rem",
+      right: "1rem",
+    }}
+  >
+    <DocsIcon
+      width="24"
+      height="24"
+      CustomColor={isDarkTheme ? "white" : "#3C494F"}
+    />
+    &nbsp;Docs
+  </StyledButton>
+);
 
-  const logout = () => {
-    fetch(proxyUrl + "/token", { method: httpDelete })
-      .then(console.log)
-      .catch(console.error);
-  };
+const HeaderSection = ({ isDarkTheme }) => (
+  <MuiBox display="flex" justifyContent="center" mb={2}>
+    <MuiBox textAlign="center">
+      <KanvasHorizontalLight
+        width="600"
+        height="auto"
+        CustomColor={isDarkTheme ? "white" : "#3C494F"}
+      />
+      <Typography>
+        Design and operate your cloud native deployments with Kanvas.
+      </Typography>
+    </MuiBox>
+  </MuiBox>
+);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch user
-        const userRes = await fetch(`${proxyUrl}/api/user`);
-        const userText = await userRes.text();
-        const userData = JSON.parse(userText);
-        setUser(userData);
+const LaunchKanvasSection = ({ isDarkTheme }) => (
+  <ExtensionWrapper
+    sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
+  >
+    <AccountDiv>
+      <KanvasGreen height={70} width={72} />
+      <LinkButton onClick={() => (window.location.href = proxyUrl)}>
+        <StyledLink style={{ color: "white" }}>Launch Kanvas</StyledLink>
+      </LinkButton>
+    </AccountDiv>
+  </ExtensionWrapper>
+);
 
-        // Fetch version
-        const versionRes = await fetch(`${proxyUrl}/api/system/version`);
-        const versionText = await versionRes.text();
-        const versionData = JSON.parse(versionText);
-        setKanvasVersion(versionData?.build);
-      } catch (err) {
-        console.error("Error loading data:", err);
-      }
-    };
-
-    fetchData();
-  }, []);
-
+const ImportDesignSection = ({ isDarkTheme }) => {
   const handleImport = async (e) => {
     try {
       const file = e.target?.files?.[0];
-
       if (!file) {
         window.ddClient.desktopUI.toast.error("No file selected.");
         return;
       }
 
       const name = randomApplicationNameGenerator();
-      const base64File = await getBase64EncodedFile(file);
-      console.log("base64", base64File);
-
-      const body = JSON.stringify({
+      const base64 = await getBase64EncodedFile(file);
+      const payload = {
         name,
-        file: getUnit8ArrayDecodedFile(base64File),
+        file: getUnit8ArrayDecodedFile(base64),
         file_name: file.name,
-      });
+      };
 
-      const res = await fetch(proxyUrl + "/api/pattern/import", {
+      const res = await fetch(`${proxyUrl}/api/pattern/import`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
         },
-        body,
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) throw new Error("Upload failed");
-
-      window.ddClient.desktopUI.toast.success(
-        `Design file has been uploaded with name: ${name}`,
-      );
+      window.ddClient.desktopUI.toast.success(`Design uploaded as: ${name}`);
     } catch (err) {
-      console.error("Error uploading file:", err);
-      window.ddClient.desktopUI.toast.error(
-        "Some error occurred while uploading the design file.",
-      );
+      console.error("Import error:", err);
+      window.ddClient.desktopUI.toast.error("Error uploading design file.");
     }
   };
 
-  const OpenDocs = () => {
-    // window.location.href = proxyUrl;
-    window.ddClient.host.openExternal(`https://docs.layer5.io/kanvas/`);
-  };
+  return (
+    <ExtensionWrapper
+      sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
+    >
+      <AccountDiv>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={2}
+        >
+          <Typography whiteSpace="nowrap">Import Design File</Typography>
+          <CustomTooltip title="Supported formats: Helm, K8s, Kustomize, Docker Compose">
+            <InfoCircleIcon height={24} width={24} />
+          </CustomTooltip>
+        </Box>
+        <label htmlFor="upload-button">
+          <StyledButton variant="contained" component="span">
+            <input
+              id="upload-button"
+              type="file"
+              accept=".yaml, .yml"
+              hidden
+              onChange={handleImport}
+            />
+            Browse...
+          </StyledButton>
+        </label>
+      </AccountDiv>
+    </ExtensionWrapper>
+  );
+};
 
-  const launchKanvas = () => {
-    console.log("Launching Kanvas...");
-    window.location.href = proxyUrl;
+const VersionInfoSection = ({ kanvasVersion, isDarkTheme }) => (
+  <MuiBox pt={1.2} display="flex" alignItems="center" gap={1}>
+    <CustomTooltip title="Kanvas Server Version">
+      <VersionText>{kanvasVersion}</VersionText>
+    </CustomTooltip>
+    {kanvasVersion && (
+      <a
+        href={`https://docs.Kanvas.io/project/releases/${kanvasVersion}`}
+        target="_blank"
+        rel="noreferrer"
+        style={{ color: isDarkTheme ? "white" : "black" }}
+      >
+        <OpenInNewIcon sx={{ width: "0.85rem", verticalAlign: "middle" }} />
+      </a>
+    )}
+  </MuiBox>
+);
+
+const UserAccountSection = ({ isDarkTheme }) => {
+  const [user, setUser] = useState(null);
+  const [kanvasVersion, setKanvasVersion] = useState("");
+
+  useEffect(() => {
+    const fetchUserAndVersion = async () => {
+      try {
+        const [userRes, versionRes] = await Promise.all([
+          fetch(`${proxyUrl}/api/user`),
+          fetch(`${proxyUrl}/api/system/version`),
+        ]);
+
+        const user = JSON.parse(await userRes.text());
+        const version = JSON.parse(await versionRes.text());
+
+        setUser(user);
+        setKanvasVersion(version?.build || "");
+      } catch (err) {
+        console.error("Error fetching user or version:", err);
+      }
+    };
+
+    fetchUserAndVersion();
+  }, []);
+
+  const logout = async () => {
+    try {
+      await fetch(`${proxyUrl}/token`, { method: "DELETE" });
+      console.log("Logged out");
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
   };
 
   return (
-    <div>
-      <SistentThemeProviderWithoutBaseLine>
-        <StyledButton
-          size="small"
-          onClick={() => OpenDocs()}
-          style={{
-            backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE",
-            position: "absolute",
-            top: "1rem",
-            right: "1rem",
-          }}
-        >
-          <DocsIcon
-            width="24"
-            height="24"
-            CustomColor={isDarkTheme ? "white" : "#3C494F"}
-            alt="Docs"
+    <ExtensionWrapper
+      sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
+    >
+      <AccountDiv>
+        {user?.user_id && (
+          <MuiBox display="flex" flexDirection="column" alignItems="center">
+            <Typography mb={2}>{user.user_id}</Typography>
+            <Avatar
+              src={user.avatar_url}
+              sx={{ width: 80, height: 80, mb: 2 }}
+            />
+          </MuiBox>
+        )}
+        <LogoutButton>
+          <Button onClick={logout} color="secondary" variant="contained">
+            Logout
+          </Button>
+        </LogoutButton>
+        <MuiBox pt={2}>
+          <VersionInfoSection
+            kanvasVersion={kanvasVersion}
+            isDarkTheme={isDarkTheme}
           />
-          &nbsp;Docs
-        </StyledButton>
-      </SistentThemeProviderWithoutBaseLine>
-      <div
-        style={{
+        </MuiBox>
+      </AccountDiv>
+    </ExtensionWrapper>
+  );
+};
+
+// ─────── Main Dashboard Component ─────────────────────
+
+export const Dasboard = ({ isDarkMode }) => {
+  const isDarkTheme = isDarkMode;
+
+  return (
+    <SistentThemeProviderWithoutBaseLine>
+      <DocsButton
+        isDarkTheme={isDarkTheme}
+        onClick={() =>
+          window.ddClient.host.openExternal("https://docs.layer5.io/kanvas/")
+        }
+      />
+      <HeaderSection isDarkTheme={isDarkTheme} />
+      <SectionWrapper
+        sx={{
           display: "flex",
-          justifyContent: "space-evenly",
+          flexDirection: "row",
+          gap: "1.5rem",
+          alignItems: "center",
         }}
       >
-        <div>
-          <KanvasHorizontalLight
-            width="600"
-            height="auto"
-            CustomColor={isDarkTheme ? "white" : "#3C494F"}
-          />
-
-          <Typography sx={{ margin: "auto", paddingTop: "-1rem" }}>
-            Design and operate your cloud native deployments with Kanvas.
-          </Typography>
-        </div>
-      </div>
-
-      <SectionWrapper>
-        <ExtensionWrapper
-          className="third-step"
-          sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
-        >
-          <AccountDiv>
-            <div style={{ marginBottom: "0.5rem" }}>
-              <a
-                style={{ textDecoration: "none" }}
-                href={
-                  token &&
-                  `http://localhost:9081/api/user/token?token=" +
-                      token +
-                      "&provider=${SELECTED_PROVIDER_NAME}`
-                }
-              >
-                <div>
-                  <KanvasGreen height={70} width={72} />
-                </div>
-              </a>
-              <LinkButton onClick={launchKanvas}>
-                <StyledLink
-                  style={{ textDecoration: "none", color: "white" }}
-                  // href={
-                  //   token &&
-                  //   `http://localhost:9081/api/user/token?token=" +
-                  //     token +
-                  //     "&provider=${SELECTED_PROVIDER_NAME}`
-                  // }
-                >
-                  Launch Kanvas
-                </StyledLink>
-              </LinkButton>
-            </div>
-          </AccountDiv>
-        </ExtensionWrapper>
-        <ExtensionWrapper
-          className="second-step"
-          sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
-        >
-          <AccountDiv>
-            <Box
-              display="flex"
-              gap={2}
-              mb="2rem"
-              alignItems={"center"}
-              justifyItems={"center"}
-              justifyContent={"space-between"}
-            >
-              <Typography sx={{ whiteSpace: " nowrap" }}>
-                Import Design File
-              </Typography>
-              <CustomTooltip title="Supported file types include Kubernetes manifests, Helm charts, Kustomize, and Docker Compose. Learn more at https://docs.kanvas.new">
-                <div>
-                  <InfoCircleIcon
-                    height={24}
-                    width={24}
-                    style={{ minWidth: "auto", marginLeft: "8px" }}
-                  />
-                </div>
-              </CustomTooltip>
-            </Box>
-            <div style={{ paddingBottom: "1rem" }}>
-              <label htmlFor="upload-button">
-                <StyledButton
-                  variant="contained"
-                  color="primary"
-                  aria-label="Upload Button"
-                  component="span"
-                >
-                  <input
-                    id="upload-button"
-                    type="file"
-                    accept=".yaml, .yml"
-                    hidden
-                    name="upload-button"
-                    onChange={handleImport}
-                  />
-                  Browse...
-                </StyledButton>
-              </label>
-            </div>
-          </AccountDiv>
-        </ExtensionWrapper>
-
-        <div>
-          <ExtensionWrapper
-            className="third-step"
-            sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
-          >
-            <AccountDiv>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                {user?.user_id && (
-                  <Typography
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      marginBottom: "1.5rem",
-                    }}
-                  >
-                    {user?.user_id}
-                    <Avatar
-                      src={user?.avatar_url}
-                      sx={{
-                        width: "5rem",
-                        height: "5rem",
-                        marginTop: "1.5rem",
-                      }}
-                    />
-                  </Typography>
-                )}
-                <LogoutButton
-                  variant="p"
-                  component="p"
-                  style={{
-                    transform: "none",
-                  }}
-                >
-                  <Button
-                    onClick={logout}
-                    color="secondary"
-                    component="span"
-                    variant="contained"
-                  >
-                    Logout
-                  </Button>
-                </LogoutButton>
-              </div>
-            </AccountDiv>
-          </ExtensionWrapper>
-        </div>
+        <LaunchKanvasSection isDarkTheme={isDarkTheme} />
+        <ImportDesignSection isDarkTheme={isDarkTheme} />
+        <UserAccountSection isDarkTheme={isDarkTheme} />
       </SectionWrapper>
-
-      <SectionWrapper>
-        <div style={{ paddingTop: "1.2rem" }}>
-          <CustomTooltip title="Kanvas Server version">
-            <VersionText variant="span" component="span" align="end">
-              {KanvasVersion || ""}
-            </VersionText>
-          </CustomTooltip>
-          <a
-            href={`https://docs.Kanvas.io/project/releases/${KanvasVersion}`}
-            target="_blank"
-            rel="noreferrer"
-            style={{ color: isDarkTheme ? "white" : "black" }}
-          >
-            <OpenInNewIcon
-              style={{ width: "0.85rem", verticalAlign: "middle" }}
-            />
-          </a>
-        </div>
-      </SectionWrapper>
-    </div>
+    </SistentThemeProviderWithoutBaseLine>
   );
 };
