@@ -1,4 +1,4 @@
-minclude build/Makefile.core.mk
+include build/Makefile.core.mk
 include build/Makefile.show-help.mk
 
 IMAGE?=layer5/kanvas-docker-extension:edge-latest
