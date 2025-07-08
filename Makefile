@@ -26,7 +26,7 @@ bin:
 	$(GO_BUILD) -o bin/service ./vm
 
 ## Build service image to be deployed as a Docker extension
-extension:
+extension-build:
 	docker build --tag=$(IMAGE) --build-arg GIT_VERSION=$(GIT_VERSION) --build-arg GIT_STRIPPED_VERSION=$(GIT_STRIPPED_VERSION) .
 
 ## Build extension container with no cache
