@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Button } from "@mui/material";
+import { Typography } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import Tour from "../Walkthrough/Tour";
-import { Avatar } from "@mui/material";
-import KanvasGreen from "../../img/SVGs/KanvasGreen";
 import DocsIcon from "../../img/SVGs/docsIcon";
 import KanvasHorizontalLight from "../../img/SVGs/KanvasHorizontalLight";
-import KanvasIcon from "../../img/kanvas-logo/CustomKanvasLogo";
 import { DockerMuiThemeProvider } from "@docker/docker-mui-theme";
 import CssBaseline from "@mui/material/CssBaseline";
 import { LoadComp } from "../LoadingComponent/LoadComp";
@@ -15,24 +10,14 @@ import {
   LoadingDiv,
   AccountDiv,
   ExtensionWrapper,
-  LinkButton,
   ComponentWrapper,
   SectionWrapper,
-  VersionText,
-  LogoutButton,
   StyledButton,
-  StyledLink,
 } from "./styledComponents";
-import { KanvasAnimation } from "../KanvasAnimation/KanvasAnimation";
 import { randomApplicationNameGenerator } from "../../utils";
-import {
-  SistentThemeProviderWithoutBaseLine,
-  InfoCircleIcon,
-  CustomTooltip,
-  Box,
-  // CustomTooltip,
-} from "@sistent/sistent";
-import { providerUrl, SELECTED_PROVIDER_NAME } from "../utils/constants";
+import { SistentThemeProviderWithoutBaseLine } from "@sistent/sistent";
+import { providerUrl } from "../utils/constants";
+import { Dasboard } from "./AuthedDashboard";
 
 // Fallback theme provider for when Docker extension themes aren't available
 const DockerMuiThemeProviderWithFallback = ({ children }) => {
@@ -408,6 +393,15 @@ const ExtensionsComponent = () => {
     window.location.href = proxyUrl;
   };
 
+  if (isLoggedIn) {
+    return (
+      <DockerMuiThemeProviderWithFallback>
+        <CssBaseline />
+        <Dasboard isDarkMode={isDarkTheme} token={token} />
+      </DockerMuiThemeProviderWithFallback>
+    );
+  }
+
   return (
     <DockerMuiThemeProviderWithFallback>
       <CssBaseline />
@@ -437,7 +431,6 @@ const ExtensionsComponent = () => {
             &nbsp;Docs
           </StyledButton>
         </SistentThemeProviderWithoutBaseLine>
-        {/* {isLoggedIn && <Tour />} */}
         <div
           style={{
             display: "flex",
@@ -463,51 +456,6 @@ const ExtensionsComponent = () => {
             sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
           >
             <AccountDiv>
-              <div style={{ marginBottom: "0.5rem" }}>
-                <a
-                  style={{ textDecoration: "none" }}
-                  href={
-                    token &&
-                    `http://localhost:9081/api/user/token?token=" +
-                      token +
-                      "&provider=${SELECTED_PROVIDER_NAME}`
-                  }
-                >
-                  {isLoggedIn ? (
-                    <div
-                      onMouseEnter={() => setIsHovered(!isHovered)}
-                      onMouseLeave={onMouseOut}
-                      onClick={onClick}
-                      onMouseOver={onMouseOver}
-                    >
-                      {isHovered ? (
-                        <KanvasAnimation height={70} width={72} />
-                      ) : (
-                        <KanvasGreen height={70} width={72} />
-                      )}
-                    </div>
-                  ) : (
-                    <KanvasGreen height={70} width={72} />
-                  )}
-                </a>
-                {isLoggedIn ? (
-                  <LinkButton onClick={launchKanvas}>
-                    <StyledLink
-                      style={{ textDecoration: "none", color: "white" }}
-                      // href={
-                      //   token &&
-                      //   `http://localhost:9081/api/user/token?token=" +
-                      //     token +
-                      //     "&provider=${SELECTED_PROVIDER_NAME}`
-                      // }
-                    >
-                      Launch Kanvas
-                    </StyledLink>
-                  </LinkButton>
-                ) : (
-                  ""
-                )}
-              </div>
               {!isLoggedIn ? (
                 <StyledButton
                   sx={{ marginTop: "0.3rem" }}
@@ -530,137 +478,6 @@ const ExtensionsComponent = () => {
               )}
             </AccountDiv>
           </ExtensionWrapper>
-          {isLoggedIn && (
-            <ExtensionWrapper
-              className="second-step"
-              sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
-            >
-              {/* <RemoteShellLoader /> */}
-              <AccountDiv>
-                <Box
-                  display="flex"
-                  gap={2}
-                  mb="2rem"
-                  alignItems={"center"}
-                  justifyItems={"center"}
-                  justifyContent={"space-between"}
-                >
-                  <Typography sx={{ whiteSpace: " nowrap" }}>
-                    Import Design File
-                  </Typography>
-                  <CustomTooltip title="Supported file types include Kubernetes manifests, Helm charts, Kustomize, and Docker Compose. Learn more at https://docs.kanvas.new">
-                    <div>
-                      <InfoCircleIcon
-                        height={24}
-                        width={24}
-                        style={{ minWidth: "auto", marginLeft: "8px" }}
-                      />
-                    </div>
-                  </CustomTooltip>
-                </Box>
-                <div style={{ paddingBottom: "1rem" }}>
-                  <label htmlFor="upload-button">
-                    <StyledButton
-                      variant="contained"
-                      color="primary"
-                      disabled={!isLoggedIn}
-                      aria-label="Upload Button"
-                      component="span"
-                    >
-                      <input
-                        id="upload-button"
-                        type="file"
-                        accept=".yaml, .yml"
-                        hidden
-                        name="upload-button"
-                        onChange={handleImport}
-                      />
-                      Browse...
-                    </StyledButton>
-                  </label>
-                </div>
-              </AccountDiv>
-            </ExtensionWrapper>
-          )}
-          {!isLoggedIn ? (
-            <div sx={{ display: "none" }}></div>
-          ) : (
-            <div>
-              <ExtensionWrapper
-                className="third-step"
-                sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
-              >
-                <AccountDiv>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    {user?.user_id && (
-                      <Typography
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                          marginBottom: "1.5rem",
-                        }}
-                      >
-                        {user?.user_id}
-                        <Avatar
-                          src={user?.avatar_url}
-                          sx={{
-                            width: "5rem",
-                            height: "5rem",
-                            marginTop: "1.5rem",
-                          }}
-                        />
-                      </Typography>
-                    )}
-                    <LogoutButton
-                      variant="p"
-                      component="p"
-                      style={{
-                        transform: "none",
-                      }}
-                    >
-                      <Button
-                        onClick={logout}
-                        color="secondary"
-                        component="span"
-                        variant="contained"
-                      >
-                        Logout
-                      </Button>
-                    </LogoutButton>
-                  </div>
-                </AccountDiv>
-              </ExtensionWrapper>
-            </div>
-          )}
-        </SectionWrapper>
-
-        <SectionWrapper>
-          {isLoggedIn && (
-            <div style={{ paddingTop: isLoggedIn ? "1.2rem" : null }}>
-              <CustomTooltip title="Kanvas Server version">
-                <VersionText variant="span" component="span" align="end">
-                  {KanvasVersion || ""}
-                </VersionText>
-              </CustomTooltip>
-              <a
-                href={`https://docs.Kanvas.io/project/releases/${KanvasVersion}`}
-                target="_blank"
-                rel="noreferrer"
-                style={{ color: isDarkTheme ? "white" : "black" }}
-              >
-                <OpenInNewIcon
-                  style={{ width: "0.85rem", verticalAlign: "middle" }}
-                />
-              </a>
-            </div>
-          )}
         </SectionWrapper>
       </ComponentWrapper>
     </DockerMuiThemeProviderWithFallback>
