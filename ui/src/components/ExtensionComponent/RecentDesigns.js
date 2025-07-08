@@ -12,7 +12,7 @@ import {
   CircularProgress,
   Box,
 } from "@mui/material";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import { ExternalLinkIcon } from "@sistent/sistent";
 import { DesignIcon } from "@sistent/sistent";
 
 import { getFormatDate } from "@sistent/sistent";
@@ -98,13 +98,14 @@ export default function RecentDesignsCard({ isDarkTheme }) {
             {designs.map((design) => (
               <ListItem
                 key={design.id}
+                onClick={() => openDesign(design)}
                 secondaryAction={
                   <IconButton
                     onClick={() => openDesign(design)}
                     edge="end"
                     aria-label="open"
                   >
-                    <OpenInNewIcon />
+                    <ExternalLinkIcon fill="#eee" />
                   </IconButton>
                 }
               >
