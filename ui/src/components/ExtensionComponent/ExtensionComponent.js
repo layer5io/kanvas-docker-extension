@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Button, Tooltip } from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import Tour from "../Walkthrough/Tour";
@@ -26,43 +26,49 @@ import {
 import { KanvasAnimation } from "../KanvasAnimation/KanvasAnimation";
 import { randomApplicationNameGenerator } from "../../utils";
 import {
-  SistentThemeProviderWithoutBaseLine, InfoCircleIcon, CustomTooltip, IconWrapper
+  SistentThemeProviderWithoutBaseLine,
+  InfoCircleIcon,
+  CustomTooltip,
+  Box,
+  // CustomTooltip,
 } from "@sistent/sistent";
-import {
-  providerUrl,
-  SELECTED_PROVIDER_NAME,
-} from "../utils/constants";
+import { providerUrl, SELECTED_PROVIDER_NAME } from "../utils/constants";
 
 // Fallback theme provider for when Docker extension themes aren't available
 const DockerMuiThemeProviderWithFallback = ({ children }) => {
-  const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  
+  const isDarkMode =
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches;
+
   // Check if Docker extension themes are available
   if (window.__ddMuiV5Themes) {
     try {
       return React.createElement(DockerMuiThemeProvider, {}, children);
     } catch (error) {
-      console.warn('Docker MUI theme provider failed, falling back to default theme:', error);
+      console.warn(
+        "Docker MUI theme provider failed, falling back to default theme:",
+        error,
+      );
     }
   }
-  
+
   // Fallback theme configuration
   const fallbackTheme = createTheme({
     palette: {
-      mode: isDarkMode ? 'dark' : 'light',
+      mode: isDarkMode ? "dark" : "light",
       primary: {
-        main: '#00B39F',
+        main: "#00B39F",
       },
       secondary: {
-        main: '#00D3A9',
+        main: "#00D3A9",
       },
       background: {
-        default: isDarkMode ? '#121212' : '#ffffff',
-        paper: isDarkMode ? '#1e1e1e' : '#ffffff',
+        default: isDarkMode ? "#121212" : "#ffffff",
+        paper: isDarkMode ? "#1e1e1e" : "#ffffff",
       },
     },
   });
-  
+
   return React.createElement(ThemeProvider, { theme: fallbackTheme }, children);
 };
 
@@ -223,44 +229,12 @@ const ExtensionsComponent = () => {
   const [filter, setFilter] = useState(null);
   const [userDesigns, setUserDesigns] = useState(null);
 
-  // useEffect(() => {
-  //   if (meshAdapters && meshAdapters.length !== 0) {
-  //     setSwitchesState(
-  //       meshAdapters.map((adapter) => ({
-  //         [adapter.name]: false,
-  //       })),
-  //     )
-  //   }
-  // }, [meshAdapters])
   const [KanvasVersion, setKanvasVersion] = useState(null);
 
   const logout = () => {
     fetch(proxyUrl + "/token", { method: httpDelete })
       .then(console.log)
       .catch(console.error);
-  };
-
-  const onSubmit = async (feedback) => {
-    const userFeedbackRequestBody = {
-      scope: feedback?.label,
-      message: feedback?.message,
-      page_location: "",
-      metadata: {},
-    };
-    fetch(`${providerUrl}` + "/api/identity/users/notify/feedback", {
-      method: httpPost,
-      body: userFeedbackRequestBody,
-    })
-      .then(console.log)
-      .catch(console.error);
-
-    // if (resp.error) {
-    //   window.ddClient.desktopUI.toast.error(
-    //     "Error submitting feedback. Check your Internet connection and try again."
-    //   );
-    //   return;
-    // }
-    // window.ddClient.desktopUI.toast.success("Thank you! We have received your feedback.");
   };
 
   useEffect(() => {
@@ -367,45 +341,6 @@ const ExtensionsComponent = () => {
     isChanging(true);
     setIsHovered(true);
   };
-  // const submitConfig = (mesh, deprovision = false, meshAdapters) => {
-  //   const targetMesh = meshAdapters.find((msh) => msh.name === mesh)
-  //   const deployQuery = targetMesh.ops.find((op) => !op.category).key
-  //   const data = {
-  //     adapter: targetMesh.adapter_location,
-  //     query: deployQuery,
-  //     namespace: 'default',
-  //     customBody: '',
-  //     deleteOp: deprovision ? 'on' : '',
-  //   }
-
-  //   const params = Object.keys(data)
-  //     .map(
-  //       (key) => `${encodeURIComponentkey)}=${encodeURIComponent(data[key])}`,
-  //     )
-  //     .join('&')
-  //   fetch(proxyUrl + '/api/system/adapter/operation', {
-  //     credentials: 'same-origin',
-  //     method: 'POST',
-  //     credentials: 'include',
-  //     headers: {
-  //       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-  //     },
-  //     mode: 'no-cors',
-  //     body: params,
-  //   })
-  //     .then(() => {
-  //       window.ddClient.desktopUI.toast.success(
-  //         `Request received. ${deprovision ? 'Deprovisioning' : 'Provisioning'
-  //         } Service Mesh...`,
-  //       )
-  //     })
-  //     .catch(() => {
-  //       window.ddClient.desktopUI.toast.error(
-  //         `Could not ${deprovision ? 'Deprovision' : 'Provision'
-  //         } the Service Mesh due to some error.`,
-  //       )
-  //     })
-  // }
 
   const getBase64EncodedFile = (file) => {
     return new Promise((resolve, reject) => {
@@ -465,9 +400,7 @@ const ExtensionsComponent = () => {
 
   const OpenDocs = () => {
     // window.location.href = proxyUrl;
-    window.ddClient.host.openExternal(
-      `https://docs.layer5.io/kanvas/`,
-    );
+    window.ddClient.host.openExternal(`https://docs.layer5.io/kanvas/`);
   };
 
   const launchKanvas = () => {
@@ -495,11 +428,16 @@ const ExtensionsComponent = () => {
               right: "1rem",
             }}
           >
-          <DocsIcon width="24" height="24" CustomColor={isDarkTheme ? "white" : "#3C494F"}  alt="Docs" />&nbsp;Docs
+            <DocsIcon
+              width="24"
+              height="24"
+              CustomColor={isDarkTheme ? "white" : "#3C494F"}
+              alt="Docs"
+            />
+            &nbsp;Docs
           </StyledButton>
-          
         </SistentThemeProviderWithoutBaseLine>
-        {isLoggedIn && <Tour />}
+        {/* {isLoggedIn && <Tour />} */}
         <div
           style={{
             display: "flex",
@@ -507,7 +445,11 @@ const ExtensionsComponent = () => {
           }}
         >
           <div>
-            <KanvasHorizontalLight width="600" height="auto" CustomColor={isDarkTheme ? "white" : "#3C494F"} />
+            <KanvasHorizontalLight
+              width="600"
+              height="auto"
+              CustomColor={isDarkTheme ? "white" : "#3C494F"}
+            />
 
             <Typography sx={{ margin: "auto", paddingTop: "-1rem" }}>
               Design and operate your cloud native deployments with Kanvas.
@@ -578,7 +520,7 @@ const ExtensionsComponent = () => {
                       providerUrl +
                       "?source=aHR0cDovL2xvY2FsaG9zdDo3ODc3L3Rva2VuL3N0b3Jl&provider_version=v0.3.14";
                     console.log("provider url", url);
-                    window.ddClient.host.openExternal(url);
+                    window?.ddClient?.host?.openExternal?.(url);
                   }}
                 >
                   Login
@@ -595,11 +537,27 @@ const ExtensionsComponent = () => {
             >
               {/* <RemoteShellLoader /> */}
               <AccountDiv>
-                <Typography
-                  sx={{ marginBottom: "2rem", whiteSpace: " nowrap" }}
+                <Box
+                  display="flex"
+                  gap={2}
+                  mb="2rem"
+                  alignItems={"center"}
+                  justifyItems={"center"}
+                  justifyContent={"space-between"}
                 >
-                  Import Design File
-                </Typography>
+                  <Typography sx={{ whiteSpace: " nowrap" }}>
+                    Import Design File
+                  </Typography>
+                  <CustomTooltip title="Supported file types include Kubernetes manifests, Helm charts, Kustomize, and Docker Compose. Learn more at https://docs.kanvas.new">
+                    <div>
+                      <InfoCircleIcon
+                        height={24}
+                        width={24}
+                        style={{ minWidth: "auto", marginLeft: "8px" }}
+                      />
+                    </div>
+                  </CustomTooltip>
+                </Box>
                 <div style={{ paddingBottom: "1rem" }}>
                   <label htmlFor="upload-button">
                     <StyledButton
@@ -620,12 +578,6 @@ const ExtensionsComponent = () => {
                       Browse...
                     </StyledButton>
                   </label>
-                  <CustomTooltip title="Supported file types include Kubernetes manifests, Helm charts, Kustomize, and Docker Compose. Learn more at https://docs.kanvas.new">
-                         <IconWrapper>
-
-                    <InfoCircleIcon style={{ minWidth: 'auto', padding: '4px' }} />
-                    </IconWrapper>
-                  </CustomTooltip>
                 </div>
               </AccountDiv>
             </ExtensionWrapper>
@@ -692,11 +644,11 @@ const ExtensionsComponent = () => {
         <SectionWrapper>
           {isLoggedIn && (
             <div style={{ paddingTop: isLoggedIn ? "1.2rem" : null }}>
-              <Tooltip title="Kanvas Server version">
+              <CustomTooltip title="Kanvas Server version">
                 <VersionText variant="span" component="span" align="end">
-                  {KanvasVersion}
+                  {KanvasVersion || ""}
                 </VersionText>
-              </Tooltip>
+              </CustomTooltip>
               <a
                 href={`https://docs.Kanvas.io/project/releases/${KanvasVersion}`}
                 target="_blank"
