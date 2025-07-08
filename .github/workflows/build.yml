@@ -1,0 +1,82 @@
+name: Docker Extension for Kanvas
+
+on:
+  push:
+    tags:
+      - "v*"
+    branches:
+      - "master"
+    paths-ignore:
+      - "docs/**"
+    #   - '.github/**'
+
+  workflow_dispatch:
+    inputs:
+      release-ver:
+        description: "Stable Release Version"
+        required: true
+        default: "v"
+      stripped-release-ver:
+        description: "Stripped Stable Release Version"
+        required: true
+        default: ""
+      release-channel:
+        description: "Release Channel"
+        required: true
+        default: "edge"
+
+env:
+  GIT_VERSION: ${{github.event.inputs.release-ver}}
+  GIT_STRIPPED_VERSION: ${{github.event.inputs.stripped-release-ver}}
+  RELEASE_CHANNEL: ${{github.event.inputs.release-channel}}
+
+jobs:
+  derive-version-info:
+    runs-on: ubuntu-24.04
+    outputs:
+      GIT_VERSION: ${{ steps.set-vars.outputs.GIT_VERSION }}
+      GIT_STRIPPED_VERSION: ${{ steps.set-vars.outputs.GIT_STRIPPED_VERSION }}
+      RELEASE_CHANNEL: ${{ steps.set-vars.outputs.RELEASE_CHANNEL }}
+    steps:
+      - name: Set version variables from tag
+        id: set-vars
+        run: |
+          TAG_NAME="${{ github.event.release.tag_name }}"
+          echo "Detected tag: $TAG_NAME"
+
+          # Strip 'v' from version tag if it exists
+          STRIPPED_VERSION="${TAG_NAME#v}"
+
+          # Use 'stable' if it's a tagged release, else fallback to 'edge'
+          if [[ "$TAG_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+            CHANNEL="stable"
+          else
+            CHANNEL="edge"
+          fi
+
+          echo "GIT_VERSION=$TAG_NAME" >> $GITHUB_OUTPUT
+          echo "GIT_STRIPPED_VERSION=$STRIPPED_VERSION" >> $GITHUB_OUTPUT
+          echo "RELEASE_CHANNEL=$CHANNEL" >> $GITHUB_OUTPUT
+
+  docker-extension:
+    needs: derive-version-info
+    runs-on: ubuntu-24.04
+    env:
+      GIT_VERSION: ${{ needs.derive-version-info.outputs.GIT_VERSION }}
+      GIT_STRIPPED_VERSION: ${{ needs.derive-version-info.outputs.GIT_STRIPPED_VERSION }}
+      RELEASE_CHANNEL: ${{ needs.derive-version-info.outputs.RELEASE_CHANNEL }}
+    steps:
+      - name: Checkout 🛎️ repo
+        uses: actions/checkout@v4
+
+      - name: Build Extension UI
+        run: |
+          # Build UI. Produce local package.
+          make ui-build
+
+      - name: Build Extension
+        run: |
+            # Build service image to be deployed as a Docker extension
+            make extension-build
+
+      
