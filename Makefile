@@ -34,11 +34,11 @@ extension-no-cache:
 	docker build --tag=$(IMAGE) --no-cache --build-arg GIT_VERSION=$(GIT_VERSION) --build-arg GIT_STRIPPED_VERSION=$(GIT_STRIPPED_VERSION) .
 
 ## Create buildx builder for multi-arch build.
-prepare-buildx:
+buildx-prepare:
 	docker buildx inspect $(BUILDER) || docker buildx create --name=$(BUILDER) --driver=docker-container --driver-opt=network=host
 
 ## Build & Upload extension image to hub. Do not push if tag already exists.
-extension-build-push: prepare-buildx
+extension-build-push: buildx-prepare
 	docker pull $(IMAGE):$(RELEASE_CHANNEL)-$(GIT_VERSION) && echo "Failure: Tag already exists" || \
 	docker buildx build --push \
 	--builder=$(BUILDER) --platform=linux/amd64,linux/arm64 \
@@ -55,23 +55,23 @@ ui-build:
 
 ## Run UI on local port
 ui:
-	cd ui/src; npm run start; cd ../..;
+	cd ui/src; npm install; npm run start; cd ../..;
 
 ## Make easier to debug the UI
-link:
+extension-link:
 	docker extension dev ui-source $(IMAGE) http://localhost:3000
 	docker extension dev debug $(NAME)
 
 ## docker extension dev reset
-reset:
+extension-reset:
 	docker extension dev reset $(IMAGE)
 
 ## docker extension install
-install-extension:
+extension-install:
 	docker extension install $(IMAGE) --force
 
 ## Remove the extension
-remove-extension:
+extension-remove:
 	docker extension remove $(IMAGE) || true
 
 ## Enable debug mode for the extension
@@ -79,6 +79,6 @@ enable-debug-mode:
 	docker extension dev debug $(NAME)
 
 ## Build the extension and install it
-build-dev: remove-extension extension install-extension enable-debug-mode
+build-dev: extension-remove extension extension-install enable-debug-mode
 
-.PHONY: prepare-buildx push-extension extension ui bin build-dev enable-debug-mode install-extension
+.PHONY: buildx-prepare push-extension extension ui bin build-dev enable-debug-mode extension-install extension-link extension-reset extension-remove
