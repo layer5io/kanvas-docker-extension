@@ -38,6 +38,10 @@ Kanvas is a collaborative platform designed for engineers to visualize, manage, 
 
 Kanvas simplifies the complexity of Kubernetes and multi-cloud management, making it accessible to all engineers, regardless of their expertise level. It’s like having a Google Workspace for DevOps, enabling collaborative creation, testing, and deployment of cloud native architectures.
 
+<p align="center"><a href="https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/refs/heads/master/assets/docker-extension-home.png">
+  <img src="https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/refs/heads/master/assets/docker-extension-home.png" width="90%" align="center" /></a>
+</p>
+
 ### Key Features for Docker Users
 
 The Kanvas extension for Docker brings several powerful features that enhance the Docker experience:
@@ -52,8 +56,8 @@ The Kanvas extension for Docker brings several powerful features that enhance th
 
 Kanvas also supports exporting designs as OCI-compliant container images, which can be pushed to registries like Docker Hub, GitHub Container Registry, or AWS ECR, integrating seamlessly with Docker-based workflows.
 
-<p align="center"><a href="https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/refs/heads/master/assets/docker-extension-home.png">
-  <img src="https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/refs/heads/master/assets/docker-extension-home.png" width="90%" align="center" /></a>
+<p align="center"><a href="https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/refs/heads/master/assets/kanvas-designer-lightmode.png">
+  <img src="https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/refs/heads/master/assets/kanvas-designer-lightmode.png" width="90%" align="center" /></a>
 </p>
 
 ### Why Kanvas Matters for Docker Users
