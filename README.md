@@ -29,7 +29,7 @@
 
 # Kanvas Extension for Docker
 
-**What is Kanvas?
+**What is Kanvas?**
 
 Kanvas is a collaborative platform designed for engineers to visualize, manage, and design multi-cloud and Kubernetes-native infrastructure. Built on top of Meshery, one of the Cloud Native Computing Foundation’s high-velocity open source projects, Kanvas offers two modes to cater to different DevOps workflows:
 
@@ -72,7 +72,7 @@ As Docker continues to be a cornerstone of containerization, Kanvas enhances the
 
 ## Contributing
 
-From `/install/docker-extension`, familiarize with available `make` targets by executing:
+From the root of your fork, familiarize with available `make` targets by executing:
 
 ```
 make
@@ -80,8 +80,15 @@ make
 
 Review the available targets and their purpose. In general, follow this sequence when building and testing changes:
 
+
 ```
-make extension
+make build-dev
+```
+
+Or use any of the other `make` targets, like these:
+
+```
+make extension-build
 ```
 
 Once build is complete:
