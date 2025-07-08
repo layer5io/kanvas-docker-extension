@@ -2,7 +2,7 @@
 name: 💡 Feature Request
 about: Suggest an enhancement to Meshery.
 title: ''
-labels: 'kind/enhancement'
+labels: 'kind/enhancement, docker, docker-extension'
 assignees: ''
 ---
 ### Current Behavior
