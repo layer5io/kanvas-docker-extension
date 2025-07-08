@@ -1,4 +1,4 @@
-include build/Makefile.core.mk
+minclude build/Makefile.core.mk
 include build/Makefile.show-help.mk
 
 IMAGE?=layer5/kanvas-docker-extension:edge-latest
@@ -38,7 +38,7 @@ prepare-buildx:
 	docker buildx inspect $(BUILDER) || docker buildx create --name=$(BUILDER) --driver=docker-container --driver-opt=network=host
 
 ## Build & Upload extension image to hub. Do not push if tag already exists.
-push-extension: prepare-buildx
+extension-build-push: prepare-buildx
 	docker pull $(IMAGE):$(RELEASE_CHANNEL)-$(GIT_VERSION) && echo "Failure: Tag already exists" || \
 	docker buildx build --push \
 	--builder=$(BUILDER) --platform=linux/amd64,linux/arm64 \
@@ -70,14 +70,15 @@ reset:
 install-extension:
 	docker extension install $(IMAGE) --force
 
-
+## Remove the extension
 remove-extension:
 	docker extension remove $(IMAGE) || true
 
-
+## Enable debug mode for the extension
 enable-debug-mode:
 	docker extension dev debug $(NAME)
 
+## Build the extension and install it
 build-dev: remove-extension extension install-extension enable-debug-mode
 
 .PHONY: prepare-buildx push-extension extension ui bin build-dev enable-debug-mode install-extension
