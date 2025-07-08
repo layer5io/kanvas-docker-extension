@@ -108,8 +108,17 @@ const LaunchKanvasSection = ({ isDarkTheme }) => {
           }}
         >
           <MuiBox display={"flex"} gap={2} alignItems="center">
-            {launching && <CircularProgress color="#eee" size="24" />}
-            <StyledLink style={{ color: "white" }}>Launch Kanvas</StyledLink>
+            {launching && (
+              <CircularProgress
+                sx={{
+                  color: "#fff",
+                }}
+                size="24"
+              />
+            )}
+            <StyledLink style={{ color: "white" }}>
+              {launching ? "Launching" : "Launch"} Kanvas
+            </StyledLink>
           </MuiBox>
         </StyledButton>
       </AccountDiv>
