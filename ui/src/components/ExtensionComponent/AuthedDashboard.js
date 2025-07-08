@@ -28,7 +28,7 @@ import {
   Box,
 } from "@sistent/sistent";
 
-import KanvasGreen from "../../img/SVGs/kanvasGreen";
+import kanvasColor from "../../img/SVGs/kanvasColor";
 import DocsIcon from "../../img/SVGs/docsIcon";
 import KanvasHorizontalLight from "../../img/SVGs/KanvasHorizontalLight";
 
@@ -94,7 +94,7 @@ const LaunchKanvasSection = ({ isDarkTheme }) => (
     sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
   >
     <AccountDiv>
-      <KanvasGreen height={70} width={72} style={{ marginBottom: "1rem" }} />
+      <kanvasColor height={70} width={72} style={{ marginBottom: "1rem" }} />
       <StyledButton variant="contained" component="span" onClick={() => (window.location.href = proxyUrl)}>
         <StyledLink style={{ color: "white" }}>Launch Kanvas</StyledLink>
       </StyledButton>
