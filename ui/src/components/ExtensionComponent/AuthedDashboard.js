@@ -93,6 +93,10 @@ const HeaderSection = ({ isDarkTheme }) => (
 const LaunchKanvasSection = ({ isDarkTheme }) => {
   const [launching, setLaunching] = useState(false);
 
+  const openInExternalWindow = () => {
+    window.ddClient.host.openExternal(proxyUrl + "/extension/meshmap");
+  };
+
   return (
     <ExtensionWrapper
       sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
@@ -121,6 +125,17 @@ const LaunchKanvasSection = ({ isDarkTheme }) => {
             </StyledLink>
           </MuiBox>
         </StyledButton>
+        <StyledLink
+          style={{
+            color: "#eee",
+            cursor: "pointer",
+            marginTop: "0.25rem",
+            padding: "0px",
+          }}
+          onClick={openInExternalWindow}
+        >
+          Open in external window
+        </StyledLink>
       </AccountDiv>
     </ExtensionWrapper>
   );
