@@ -14,7 +14,6 @@ import {
   SectionWrapper,
   StyledButton,
 } from "./styledComponents";
-import { randomApplicationNameGenerator } from "../../utils";
 import { SistentThemeProviderWithoutBaseLine } from "@sistent/sistent";
 import { providerUrl } from "../utils/constants";
 import { Dasboard } from "./AuthedDashboard";

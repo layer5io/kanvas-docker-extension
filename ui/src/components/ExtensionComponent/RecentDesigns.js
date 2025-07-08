@@ -99,6 +99,8 @@ export default function RecentDesignsCard({ isDarkTheme }) {
               <ListItem
                 key={design.id}
                 onClick={() => openDesign(design)}
+                style={{ cursor: "pointer" }}
+                divider
                 secondaryAction={
                   <IconButton
                     onClick={() => openDesign(design)}
