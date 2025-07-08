@@ -1,6 +1,6 @@
 import React from "react";
 
-const KanvasGreen = ({ height = 70, width = 72, ...props }) => {
+const kanvasColor = ({ height = 70, width = 72, ...props }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -44,4 +44,4 @@ const KanvasGreen = ({ height = 70, width = 72, ...props }) => {
   );
 };
 
-export default KanvasGreen;
+export default kanvasColor;
