@@ -94,10 +94,10 @@ const LaunchKanvasSection = ({ isDarkTheme }) => (
     sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
   >
     <AccountDiv>
-      <KanvasGreen height={70} width={72} />
-      <LinkButton onClick={() => (window.location.href = proxyUrl)}>
+      <KanvasGreen height={70} width={72} style={{ marginBottom: "1rem" }} />
+      <StyledButton variant="contained" component="span" onClick={() => (window.location.href = proxyUrl)}>
         <StyledLink style={{ color: "white" }}>Launch Kanvas</StyledLink>
-      </LinkButton>
+      </StyledButton>
     </AccountDiv>
   </ExtensionWrapper>
 );
@@ -151,7 +151,7 @@ const ImportDesignSection = ({ isDarkTheme }) => {
           mb={2}
         >
           <Typography whiteSpace="nowrap">Import Design File</Typography>
-          <CustomTooltip title="Supported formats: Helm, K8s, Kustomize, Docker Compose">
+          <CustomTooltip title="Supported formats: Helm chart, Kubernetes manifest, Kustomize, and Docker Compose. Learn more at https://docs.layer5.io/kanvas/getting-started/">
             <div>
               <InfoCircleIcon height={24} width={24} />
             </div>

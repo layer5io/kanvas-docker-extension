@@ -112,8 +112,8 @@ export default function RecentDesignsCard({ isDarkTheme }) {
                 <ListItemIcon>
                   <DesignIcon />
                 </ListItemIcon>
-                <ListItemText primary={design.name} />
-                <ListItemText
+                <ListItemText primary={design.name} style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap", marginRight: "1rem" }} />
+                <ListItemText style={{ color: "#ccc", textAlign: "right" }}
                   primary={`Updated ${getFormatDate(design.updated_at)}`}
                 />
               </ListItem>

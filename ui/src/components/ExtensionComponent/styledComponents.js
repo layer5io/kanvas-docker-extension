@@ -98,6 +98,7 @@ export const StyledButton = styled(ButtonBase)(({ style }) => ({
   whiteSpace: "nowrap",
   backgroundColor: "#00B39F",
   borderRadius: "5px",
+  fontSize: "1rem",
   color: "white",
   padding: "10px 20px",
   "&:hover": {
