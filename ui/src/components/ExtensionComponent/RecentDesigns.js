@@ -17,38 +17,15 @@ import { DesignIcon } from "@sistent/sistent";
 
 import { getFormatDate } from "@sistent/sistent";
 import { SectionCard } from "./styledComponents";
-
-const sampleResp = [
-  {
-    id: "1",
-    name: "Landing Page Redesign",
-    updatedAt: "2025-07-08T10:30:00Z",
-  },
-  {
-    id: "2",
-    name: "Mobile App UI",
-    updatedAt: "2025-07-07T15:12:00Z",
-  },
-  {
-    id: "3",
-    name: "Mobile App UI",
-    updatedAt: "2025-07-07T15:12:00Z",
-  },
-  {
-    id: "4",
-    name: "Mobile App UI",
-    updatedAt: "2025-07-07T15:12:00Z",
-  },
-];
+import { ProxyUrl } from "../utils/constants";
 
 export default function RecentDesignsCard({ isDarkTheme }) {
-  const [designs, setDesigns] = useState(sampleResp);
+  const [designs, setDesigns] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    return;
-    fetch("/api/designs/recent") // Replace with your actual API endpoint
+    fetch(ProxyUrl + "/api/pattern?page=0&pagesize=10&search=&order=updated_at") // Replace with your actual API endpoint
       .then(async (res) => {
         if (!res.ok) {
           const message = await res.text();
@@ -57,11 +34,12 @@ export default function RecentDesignsCard({ isDarkTheme }) {
         return res.json();
       })
       .then((data) => {
-        setDesigns(data);
+        console.log("data", data);
+        setDesigns(data?.patterns || []);
         setLoading(false);
       })
       .catch((err) => {
-        // setError(err.message || "Unknown error");
+        setError(err.message || "Unknown error");
         setLoading(false);
       });
   }, []);
@@ -101,9 +79,9 @@ export default function RecentDesignsCard({ isDarkTheme }) {
                 <ListItemIcon>
                   <DesignIcon />
                 </ListItemIcon>
+                <ListItemText primary={design.name} />
                 <ListItemText
-                  primary={design.name}
-                  secondary={`Updated ${getFormatDate(design.updatedAt)}`}
+                  primary={`Updated ${getFormatDate(design.updated_at)}`}
                 />
               </ListItem>
             ))}

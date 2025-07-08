@@ -34,3 +34,5 @@ export const SELECTED_PROVIDER_NAME = SELECTED_REMOTE_PROVIDER.name;
 export const providerUrl = SELECTED_REMOTE_PROVIDER.url;
 
 export const MESHMAP = "meshmap";
+
+export const ProxyUrl = "http://127.0.0.1:7877";

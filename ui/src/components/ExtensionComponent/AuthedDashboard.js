@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import {
   Typography,
-  Button,
   Avatar,
   IconButton,
   Box as MuiBox,
@@ -17,7 +16,6 @@ import {
   LinkButton,
   SectionWrapper,
   VersionText,
-  LogoutButton,
   StyledButton,
   StyledLink,
 } from "./styledComponents";

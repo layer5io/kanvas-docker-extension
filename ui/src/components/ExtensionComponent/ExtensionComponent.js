@@ -327,73 +327,12 @@ const ExtensionsComponent = () => {
     setIsHovered(true);
   };
 
-  const getBase64EncodedFile = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        const base64String = reader.result;
-        resolve(base64String);
-      };
-
-      reader.onerror = (error) => reject(error);
-
-      reader.readAsDataURL(file);
-    });
-  };
-
-  const handleImport = async (e) => {
-    try {
-      const file = e.target?.files?.[0];
-
-      if (!file) {
-        window.ddClient.desktopUI.toast.error("No file selected.");
-        return;
-      }
-
-      const name = randomApplicationNameGenerator();
-      const base64File = await getBase64EncodedFile(file);
-      console.log("base64", base64File);
-
-      const body = JSON.stringify({
-        name,
-        file: getUnit8ArrayDecodedFile(base64File),
-        file_name: file.name,
-      });
-
-      console.log("body", body);
-      const res = await fetch(proxyUrl + "/api/pattern/import", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json;charset=UTF-8",
-        },
-        body,
-      });
-
-      if (!res.ok) throw new Error("Upload failed");
-
-      window.ddClient.desktopUI.toast.success(
-        `Design file has been uploaded with name: ${name}`,
-      );
-    } catch (err) {
-      console.error("Error uploading file:", err);
-      window.ddClient.desktopUI.toast.error(
-        "Some error occurred while uploading the design file.",
-      );
-    }
-  };
-
   const OpenDocs = () => {
     // window.location.href = proxyUrl;
     window.ddClient.host.openExternal(`https://docs.layer5.io/kanvas/`);
   };
 
-  const launchKanvas = () => {
-    console.log("Launching Kanvas...");
-    window.location.href = proxyUrl;
-  };
-
-  if (isLoggedIn) {
+  if (isLoggedIn && token) {
     return (
       <DockerMuiThemeProviderWithFallback>
         <CssBaseline />
