@@ -14,15 +14,15 @@ on:
     inputs:
       release-ver:
         description: "Stable Release Version"
-        required: true
+        required: false
         default: "v"
       stripped-release-ver:
         description: "Stripped Stable Release Version"
-        required: true
+        required: false
         default: ""
       release-channel:
         description: "Release Channel"
-        required: true
+        required: false
         default: "edge"
 
 env:
