@@ -1,6 +1,6 @@
 <p style="text-align:center;" align="center"><a href="https://layer5.io/kanvas"><picture align="center">
-  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/layer5io/kanvas-docker-extension/blob/master/ui/src/img/kanvas/horizontal/kanvas-horizontal-color.svg"  width="70%" align="center" style="margin-bottom:20px;">
-  <source media="(prefers-color-scheme: light)" srcset="https://github.com/layer5io/kanvas-docker-extension/blob/master/ui/src/img/kanvas/horizontal/kanvas-horizontal-partial-color.svg" width="70%" align="center" style="margin-bottom:20px;">
+  <source media="(prefers-color-scheme: light)" srcset="https://github.com/layer5io/kanvas-docker-extension/blob/master/ui/src/img/kanvas/horizontal/kanvas-horizontal-color.svg"  width="70%" align="center" style="margin-bottom:20px;">
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/layer5io/kanvas-docker-extension/blob/master/ui/src/img/kanvas/horizontal/kanvas-horizontal-partial-color.svg" width="70%" align="center" style="margin-bottom:20px;">
   <img alt="Shows an illustrated light mode meshery logo in light color mode and a dark mode Kanvas logo in dark color mode." src="https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/master/ui/src/img/kanvas/horizontal/kanvas-horizontal-partial-color.svg" width="70%" align="center" style="margin-bottom:20px;">
 </picture></a><br /><br /></p>
 
@@ -67,7 +67,7 @@ As Docker continues to be a cornerstone of containerization, Kanvas enhances the
 1. Install any service mesh with the check of a box.
 1. Import your Docker Compose apps for visual design and deployment to Kubernetes and service meshes.
 
-<p align="center"><a href="https://raw.githubusercontent.com/meshery/meshery/master/install/docker-extension/docs/img/docker-desktop-extension-for-meshery.png"><img src="https://raw.githubusercontent.com/meshery/meshery/master/install/docker-extension/docs/img/docker-desktop-extension-for-meshery.png" width="90%" align="center" /></a></p>
+<p align="center"><a href="https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/refs/heads/master/assets/docker-extension-home.png"><img src="\https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/refs/heads/master/assets/docker-extension-home.png" width="90%" align="center" /></a></p>
 
 
 ## Contributing
