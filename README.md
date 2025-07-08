@@ -29,7 +29,7 @@
 
 # Kanvas Extension for Docker
 
-**What is Kanvas?**
+### What is Kanvas?
 
 Kanvas is a collaborative platform designed for engineers to visualize, manage, and design multi-cloud and Kubernetes-native infrastructure. Built on top of Meshery, one of the Cloud Native Computing Foundation’s high-velocity open source projects, Kanvas offers two modes to cater to different DevOps workflows:
 
@@ -38,7 +38,7 @@ Kanvas is a collaborative platform designed for engineers to visualize, manage, 
 
 Kanvas simplifies the complexity of Kubernetes and multi-cloud management, making it accessible to all engineers, regardless of their expertise level. It’s like having a Google Workspace for DevOps, enabling collaborative creation, testing, and deployment of cloud native architectures.
 
-**Key Features for Docker Users**
+### Key Features for Docker Users
 
 The Kanvas extension for Docker brings several powerful features that enhance the Docker experience:
 
@@ -52,7 +52,11 @@ The Kanvas extension for Docker brings several powerful features that enhance th
 
 Kanvas also supports exporting designs as OCI-compliant container images, which can be pushed to registries like Docker Hub, GitHub Container Registry, or AWS ECR, integrating seamlessly with Docker-based workflows.
 
-**Why Kanvas Matters for Docker Users**
+<p align="center"><a href="https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/refs/heads/master/assets/docker-extension-home.png">
+  <img src="https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/refs/heads/master/assets/docker-extension-home.png" width="90%" align="center" /></a>
+</p>
+
+### Why Kanvas Matters for Docker Users
 
 Docker users often transition to Kubernetes for advanced orchestration and scalability. Kanvas bridges this gap by providing a visual, no-code designer that makes Kubernetes and cloud native infrastructure management intuitive and accessible. Whether you’re a developer, DevOps engineer, or SRE, Kanvas empowers you to:
 
@@ -62,12 +66,6 @@ Docker users often transition to Kubernetes for advanced orchestration and scala
 
 As Docker continues to be a cornerstone of containerization, Kanvas enhances the Docker experience by integrating seamlessly with Docker Compose and Kubernetes workflows. It’s particularly valuable for teams looking to adopt Kubernetes without the steep learning curve or those managing complex, multi-cloud environments.
 
-## Using the Docker Extension for Kanvas
-
-1. Install any service mesh with the check of a box.
-1. Import your Docker Compose apps for visual design and deployment to Kubernetes and service meshes.
-
-<p align="center"><a href="https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/refs/heads/master/assets/docker-extension-home.png"><img src="\https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/refs/heads/master/assets/docker-extension-home.png" width="90%" align="center" /></a></p>
 
 
 ## Contributing
