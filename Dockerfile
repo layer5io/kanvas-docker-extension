@@ -39,15 +39,15 @@ LABEL org.opencontainers.image.title="Kanvas" \
         \"alt\": \"Kanvas Docker Extension\", \
         \"url\": \"https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/master/assets/docker-extension-home.png\" \
       },{ \
-        \"alt\": \"Kanvas Designer\", \
-        \"url\": \"https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/master/assets/kanvas-designer-design-loaded.png\" \
+        \"alt\": \"Collaborative design reviews in Kanvas\", \
+        \"url\": \"https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/master/assets/kanvas-docker-extension-collaboration.png\" \
       } \
       ,{ \
-        \"alt\": \"Kanvas Designer Light Mode\", \
+        \"alt\": \"Light and dark mode support in Kanvas\", \
         \"url\": \"https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/master/assets/kanvas-designer-lightmode.png\" \
       } \
      ,{ \
-        \"alt\": \"Kanvas Designer \", \
+        \"alt\": \"Blank design in Layer5 Kanvas Designer \", \
         \"url\": \"https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/master/assets/kanvas-designer-empty.png\" \
       } \
     ]" \
