@@ -13,12 +13,10 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import {
   AccountDiv,
   ExtensionWrapper,
-  LinkButton,
   SectionWrapper,
   VersionText,
   StyledButton,
   StyledLink,
-  IconWrapper,
 } from "./styledComponents";
 
 import {
