@@ -81,4 +81,7 @@ enable-debug-mode:
 ## Build the extension and install it
 build-dev: extension-remove extension-build extension-install enable-debug-mode
 
+docker:
+	docker compose up --build
+
 .PHONY: buildx-prepare push-extension extension ui bin build-dev enable-debug-mode extension-install extension-link extension-reset extension-remove

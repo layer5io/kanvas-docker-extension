@@ -1,7 +1,10 @@
 version: "3"
 services:
   meshery-proxy:
-    image: ${DESKTOP_PLUGIN_IMAGE}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${DESKTOP_PLUGIN_IMAGE:-layer5/kanvas-docker-extension:edge-dev}
     ports:
       - "7877:7877"
   meshery:
