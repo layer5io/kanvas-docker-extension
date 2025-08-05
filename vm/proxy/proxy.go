@@ -211,8 +211,10 @@ func (p *Proxy) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
 		}
 
 	default:
-		//http: Request.RequestURI can't be set in client requests.
-		//http://golang.org/src/pkg/net/http/client.go
+		if strings.EqualFold(req.Header.Get("Upgrade"), "websocket") {
+			p.proxyWebsocket(wr, req)
+			return
+		}
 		req.RequestURI = ""
 		req.URL.Scheme = "http"
 
@@ -264,6 +266,69 @@ func (p *Proxy) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
 		wr.WriteHeader(resp.StatusCode)
 		io.Copy(wr, resp.Body)
 	}
+}
+
+func (p *Proxy) proxyWebsocket(wr http.ResponseWriter, req *http.Request) {
+    upgrader.CheckOrigin = func(r *http.Request) bool { return true }
+
+    clientConn, err := upgrader.Upgrade(wr, req, nil)
+    if err != nil {
+        log.Println("websocket upgrade (client) failed:", err)
+        return
+    }
+
+    upstreamURL := fmt.Sprintf("ws://%s%s", MesheryServerHost, req.URL.RequestURI())
+
+    header := http.Header{}
+    copyHeader(header, req.Header)
+
+    if p.token != "" {
+        header.Add("Cookie", fmt.Sprintf("token=%s", p.token))
+        header.Add("Cookie", "meshery-provider=Layer5")
+    }
+
+    backendConn, _, err := websocket.DefaultDialer.Dial(upstreamURL, header)
+    if err != nil {
+        log.Println("websocket dial (backend) failed:", err)
+        clientConn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseTryAgainLater, err.Error()))
+        clientConn.Close()
+        return
+    }
+
+    errc := make(chan error, 2)
+
+    go func() {
+        for {
+            mt, message, err := clientConn.ReadMessage()
+            if err != nil {
+                errc <- err
+                return
+            }
+            if err := backendConn.WriteMessage(mt, message); err != nil {
+                errc <- err
+                return
+            }
+        }
+    }()
+
+    go func() {
+        for {
+            mt, message, err := backendConn.ReadMessage()
+            if err != nil {
+                errc <- err
+                return
+            }
+            if err := clientConn.WriteMessage(mt, message); err != nil {
+                errc <- err
+                return
+            }
+        }
+    }()
+
+    <-errc
+
+    clientConn.Close()
+    backendConn.Close()
 }
 
 func main() {
