@@ -4,11 +4,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: ${DESKTOP_PLUGIN_IMAGE:-layer5/kanvas-docker-extension:edge-dev}
+    image: layer5/kanvas-docker-extension:${EXTENSION_TAG}
     ports:
       - "7877:7877"
   meshery:
-    image: layer5/meshery:kanvas-latest
+    image: layer5/meshery:${KANVAS_TAG}
     pull_policy: always
     environment:
       - "PROVIDER_BASE_URLS=https://cloud.layer5.io"
