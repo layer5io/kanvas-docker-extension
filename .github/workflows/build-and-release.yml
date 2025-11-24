@@ -6,7 +6,7 @@ on:
   workflow_call:
     inputs:
       tag_name:
-        description: "The release tag name (e.g., v1.0.0)"
+        description: "The release tag name (e.g., v1.0.0-1)"
         required: true
         type: string
       release_channel:
@@ -17,7 +17,7 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: "The release tag name (e.g., v1.0.0)"
+        description: "The release tag name (e.g., v1.0.0-1)"
         required: true
         type: string
       release_channel:
