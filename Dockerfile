@@ -29,7 +29,6 @@ ARG GIT_STRIPPED_VERSION
 ARG GIT_VERSION
 ARG RELEASE_CHANNEL
 ARG RELEASE_NOTES
-ARG KANVAS_TAG
 ARG EXTENSION_TAG
 
 LABEL org.opencontainers.image.title="Kanvas" \
@@ -71,7 +70,6 @@ LABEL org.opencontainers.image.title="Kanvas" \
 COPY --from=builder /backend/bin/service /
 
 ENV EXTENSION_TAG=$EXTENSION_TAG
-ENV KANVAS_TAG=$KANVAS_TAG
 COPY docker-compose.yaml .
 COPY metadata.json .
 COPY assets/kanvas-mark-logo-light.svg .
