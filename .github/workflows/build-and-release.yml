@@ -34,8 +34,8 @@ jobs:
           echo "Detected tag: $TAG_NAME"
 
           # Validate tag name format to prevent command injection
-          # Allows semver patterns like v1.0.0, 1.0.0, v1.0.0-alpha, edge-latest, etc.
-          if [[ ! "$TAG_NAME" =~ ^[a-zA-Z0-9]+([._-][a-zA-Z0-9]+)*$ ]]; then
+          # Allows semver patterns like v1.0.0, 1.0.0, v1.0.0-alpha.1, edge-latest, etc.
+          if [[ ! "$TAG_NAME" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*$ ]]; then
             echo "Error: Invalid tag name format."
             exit 1
           fi
@@ -80,6 +80,10 @@ jobs:
           # Try to fetch release notes if the release exists
           if gh release view "$TAG_NAME" &> /dev/null; then
             RELEASE_NOTES=$(gh release view "$TAG_NAME" --json body -q .body)
+            # Use default message if release notes are empty
+            if [[ -z "$RELEASE_NOTES" ]]; then
+              RELEASE_NOTES="Docker Extension build for Kanvas $TAG_NAME"
+            fi
           else
             RELEASE_NOTES="Docker Extension build for Kanvas $TAG_NAME"
           fi
