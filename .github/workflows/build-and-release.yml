@@ -30,12 +30,13 @@ jobs:
         id: set-vars
         run: |
           # Get tag name from either release event or workflow_call input
-          TAG_NAME="${{ github.event.release.tag_name || inputs.tag_name }}"
+          TAG_NAME="${{ env.GIT_TAG }}"
           echo "Detected tag: $TAG_NAME"
 
-          # Validate tag name format (basic validation for security)
-          if [[ ! "$TAG_NAME" =~ ^[a-zA-Z0-9._-]+$ ]]; then
-            echo "Error: Invalid tag name format. Only alphanumeric characters, dots, hyphens, and underscores are allowed."
+          # Validate tag name format to prevent command injection
+          # Allows semver patterns like v1.0.0, 1.0.0, v1.0.0-alpha, edge-latest, etc.
+          if [[ ! "$TAG_NAME" =~ ^[a-zA-Z0-9]+([._-][a-zA-Z0-9]+)*$ ]]; then
+            echo "Error: Invalid tag name format."
             exit 1
           fi
 
@@ -73,8 +74,8 @@ jobs:
       - name: Generate release notes
         id: release_notes
         run: |
-          # Use tag from either release event or workflow_call input
-          TAG_NAME="${{ github.event.release.tag_name || inputs.tag_name }}"
+          # Use tag from environment variable (set from release event or workflow_call input)
+          TAG_NAME="${{ env.GIT_TAG }}"
 
           # Try to fetch release notes if the release exists
           if gh release view "$TAG_NAME" &> /dev/null; then
