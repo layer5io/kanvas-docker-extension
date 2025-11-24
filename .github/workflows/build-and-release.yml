@@ -37,8 +37,9 @@ jobs:
           STRIPPED_VERSION="${TAG_NAME#v}"
 
           # Determine release channel
-          if [[ -n "${{ inputs.release_channel }}" ]]; then
-            # If release_channel is explicitly provided via workflow_call, use it
+          # When workflow_call is used, inputs.release_channel is available
+          # When release event is used, determine channel from tag pattern
+          if [[ "${{ github.event_name }}" == "workflow_call" ]]; then
             CHANNEL="${{ inputs.release_channel }}"
           elif [[ "$TAG_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
             # Use 'stable' if it's a tagged release matching semver pattern
@@ -70,10 +71,10 @@ jobs:
           TAG_NAME="${{ github.event.release.tag_name || inputs.tag_name }}"
 
           # Try to fetch release notes if the release exists
-          if gh release view "$TAG_NAME" --repo ${{ github.repository }} &> /dev/null; then
-            RELEASE_NOTES=$(gh release view "$TAG_NAME" --repo ${{ github.repository }} --json body -q .body)
+          if gh release view "$TAG_NAME" &> /dev/null; then
+            RELEASE_NOTES=$(gh release view "$TAG_NAME" --json body -q .body)
           else
-            RELEASE_NOTES="Release $TAG_NAME"
+            RELEASE_NOTES="Docker Extension build for Kanvas $TAG_NAME"
           fi
 
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
