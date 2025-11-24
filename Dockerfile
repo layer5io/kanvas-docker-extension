@@ -29,6 +29,8 @@ ARG GIT_STRIPPED_VERSION
 ARG GIT_VERSION
 ARG RELEASE_CHANNEL
 ARG RELEASE_NOTES
+ARG KANVAS_TAG
+ARG EXTENSION_TAG
 
 LABEL org.opencontainers.image.title="Kanvas" \
   org.opencontainers.image.description="Kanvas, the collaborative Kubernetes manager. Go multi-player as you design and operate your cloud native infrastructure with teammates." \
@@ -67,6 +69,9 @@ LABEL org.opencontainers.image.title="Kanvas" \
   com.docker.extension.changelog="$RELEASE_NOTES" \
   com.docker.extension.additional-urls="[{\"title\":\"Documentation\",\"url\":\"https://docs.layer5.io\"},{\"title\":\"Project\",\"url\":\"https://layer5.io\"},{\"title\":\"Slack\",\"url\":\"https://slack.layer5.io\"},{\"title\":\"Discussion Forum\",\"url\":\"https://layer5.io/community#community-forums\"}]"
 COPY --from=builder /backend/bin/service /
+
+ENV EXTENSION_TAG=$EXTENSION_TAG
+ENV KANVAS_TAG=$KANVAS_TAG
 COPY docker-compose.yaml .
 COPY metadata.json .
 COPY assets/kanvas-mark-logo-light.svg .

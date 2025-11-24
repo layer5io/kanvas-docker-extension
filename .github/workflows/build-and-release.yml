@@ -6,14 +6,14 @@ on:
   workflow_call:
     inputs:
       tag_name:
-        description: 'The release tag name (e.g., v1.0.0)'
+        description: "The release tag name (e.g., v1.0.0)"
         required: true
         type: string
       release_channel:
-        description: 'Release channel (stable or edge)'
+        description: "Release channel (stable or edge)"
         required: false
         type: string
-        default: 'stable'
+        default: "stable"
 
 env:
   GIT_TAG: ${{ github.event.release.tag_name || inputs.tag_name }}
@@ -129,5 +129,7 @@ jobs:
             GIT_VERSION=${{env.GIT_VERSION}}
             RELEASE_CHANNEL=${{env.RELEASE_CHANNEL}}
             RELEASE_NOTES=${{ env.RELEASE_NOTES }}
+            KANVAS_TAG=${{env.RELEASE_CHANNEL}}-${{env.GIT_VERSION}}
+            EXTENSION_TAG=${{env.RELEASE_CHANNEL}}-${{env.GIT_VERSION}}
           tags: ${{ steps.meta.outputs.tags }}
           platforms: linux/amd64,linux/arm64
