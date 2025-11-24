@@ -3,9 +3,20 @@ name: Docker Extension for Kanvas
 on:
   release:
     types: [published] # Runs only when a new release is published
+  workflow_call:
+    inputs:
+      tag_name:
+        description: 'The release tag name (e.g., v1.0.0)'
+        required: true
+        type: string
+      release_channel:
+        description: 'Release channel (stable or edge)'
+        required: false
+        type: string
+        default: 'stable'
 
 env:
-  GIT_TAG: ${{ github.event.release.tag_name }}
+  GIT_TAG: ${{ github.event.release.tag_name || inputs.tag_name }}
 
 jobs:
   derive-version-info:
@@ -18,16 +29,22 @@ jobs:
       - name: Set version variables from tag
         id: set-vars
         run: |
-          TAG_NAME="${{ github.event.release.tag_name }}"
+          # Get tag name from either release event or workflow_call input
+          TAG_NAME="${{ github.event.release.tag_name || inputs.tag_name }}"
           echo "Detected tag: $TAG_NAME"
 
           # Strip 'v' from version tag if it exists
           STRIPPED_VERSION="${TAG_NAME#v}"
 
-          # Use 'stable' if it's a tagged release, else fallback to 'edge'
-          if [[ "$TAG_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+          # Determine release channel
+          if [[ -n "${{ inputs.release_channel }}" ]]; then
+            # If release_channel is explicitly provided via workflow_call, use it
+            CHANNEL="${{ inputs.release_channel }}"
+          elif [[ "$TAG_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+            # Use 'stable' if it's a tagged release matching semver pattern
             CHANNEL="stable"
           else
+            # Fallback to 'edge'
             CHANNEL="edge"
           fi
 
@@ -49,7 +66,16 @@ jobs:
       - name: Generate release notes
         id: release_notes
         run: |
-          RELEASE_NOTES=$(gh release create ${{ github.ref_name }} --generate-notes --repo ${{ github.repository }} | tail -n +2)  # Get generated release notes, excluding the first line
+          # Use tag from either release event or workflow_call input
+          TAG_NAME="${{ github.event.release.tag_name || inputs.tag_name }}"
+
+          # Try to fetch release notes if the release exists
+          if gh release view "$TAG_NAME" --repo ${{ github.repository }} &> /dev/null; then
+            RELEASE_NOTES=$(gh release view "$TAG_NAME" --repo ${{ github.repository }} --json body -q .body)
+          else
+            RELEASE_NOTES="Release $TAG_NAME"
+          fi
+
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
           echo "$RELEASE_NOTES" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
