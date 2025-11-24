@@ -33,6 +33,12 @@ jobs:
           TAG_NAME="${{ github.event.release.tag_name || inputs.tag_name }}"
           echo "Detected tag: $TAG_NAME"
 
+          # Validate tag name format (basic validation for security)
+          if [[ ! "$TAG_NAME" =~ ^[a-zA-Z0-9._-]+$ ]]; then
+            echo "Error: Invalid tag name format. Only alphanumeric characters, dots, hyphens, and underscores are allowed."
+            exit 1
+          fi
+
           # Strip 'v' from version tag if it exists
           STRIPPED_VERSION="${TAG_NAME#v}"
 
