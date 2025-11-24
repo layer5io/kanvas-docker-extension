@@ -5,7 +5,7 @@ on:
     types: [published] # Runs only when a new release is published
   workflow_call:
     inputs:
-      tag_name:
+      version:
         description: "The release tag name (e.g., v1.0.0-1)"
         required: true
         type: string
@@ -16,7 +16,7 @@ on:
         default: "stable"
   workflow_dispatch:
     inputs:
-      tag_name:
+      version:
         description: "The release tag name (e.g., v1.0.0-1)"
         required: true
         type: string
@@ -26,7 +26,7 @@ on:
         type: string
         default: "stable"
 env:
-  GIT_TAG: ${{ github.event.release.tag_name || inputs.tag_name }}
+  GIT_VERSION: ${{ github.event.release.version || inputs.version }}
 
 jobs:
   derive-version-info:
@@ -40,35 +40,25 @@ jobs:
         id: set-vars
         run: |
           # Get tag name from either release event or workflow_call input
-          TAG_NAME="${{ env.GIT_TAG }}"
-          echo "Detected tag: $TAG_NAME"
+          GIT_VERSION="${{ env.GIT_VERSION }}"
+          echo "Detected version: $GIT_VERSION"
 
-          # Validate tag name format to prevent command injection
+          # Validate git tag (version) name format to prevent command injection
           # Allows semver patterns like v1.0.0, 1.0.0, v1.0.0-alpha.1, edge-latest, etc.
-          if [[ ! "$TAG_NAME" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*$ ]]; then
-            echo "Error: Invalid tag name format."
+          if [[ ! "$GIT_VERSION" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*$ ]]; then
+            echo "Error: Invalid verion name format."
             exit 1
           fi
 
           # Strip 'v' from version tag if it exists
-          STRIPPED_VERSION="${TAG_NAME#v}"
+          STRIPPED_VERSION="${GIT_VERSION#v}"
 
-          # Determine release channel
           # When workflow_call is used, inputs.release_channel is available
-          # When release event is used, determine channel from tag pattern
-          if [[ "${{ github.event_name }}" == "workflow_call" ]]; then
-            CHANNEL="${{ inputs.release_channel }}"
-          elif [[ "$TAG_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
-            # Use 'stable' if it's a tagged release matching semver pattern
-            CHANNEL="stable"
-          else
-            # Fallback to 'edge'
-            CHANNEL="edge"
-          fi
+          RELEASE_CHANNEL="${{ inputs.release_channel }}"
 
-          echo "GIT_VERSION=$TAG_NAME" >> $GITHUB_OUTPUT
+          echo "GIT_VERSION=$GIT_VERSION" >> $GITHUB_OUTPUT
           echo "GIT_STRIPPED_VERSION=$STRIPPED_VERSION" >> $GITHUB_OUTPUT
-          echo "RELEASE_CHANNEL=$CHANNEL" >> $GITHUB_OUTPUT
+          echo "RELEASE_CHANNEL=$RELEASE_CHANNEL" >> $GITHUB_OUTPUT
 
   docker-extension:
     needs: derive-version-info
@@ -85,17 +75,17 @@ jobs:
         id: release_notes
         run: |
           # Use tag from environment variable (set from release event or workflow_call input)
-          TAG_NAME="${{ env.GIT_TAG }}"
+          GIT_VERSION="${{ env.GIT_VERSION }}"
 
           # Try to fetch release notes if the release exists
-          if gh release view "$TAG_NAME" &> /dev/null; then
-            RELEASE_NOTES=$(gh release view "$TAG_NAME" --json body -q .body)
+          if gh release view "$GIT_VERSION" &> /dev/null; then
+            RELEASE_NOTES=$(gh release view "$GIT_VERSION" --json body -q .body)
             # Use default message if release notes are empty
             if [[ -z "$RELEASE_NOTES" ]]; then
-              RELEASE_NOTES="Docker Extension build for Kanvas $TAG_NAME"
+              RELEASE_NOTES="Docker Extension build for Kanvas $GIT_VERSION"
             fi
           else
-            RELEASE_NOTES="Docker Extension build for Kanvas $TAG_NAME"
+            RELEASE_NOTES="Docker Extension build for Kanvas $GIT_VERSION"
           fi
 
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
@@ -139,7 +129,6 @@ jobs:
             GIT_VERSION=${{env.GIT_VERSION}}
             RELEASE_CHANNEL=${{env.RELEASE_CHANNEL}}
             RELEASE_NOTES=${{ env.RELEASE_NOTES }}
-            KANVAS_TAG=${{env.RELEASE_CHANNEL}}-${{env.GIT_VERSION}}
             EXTENSION_TAG=${{env.RELEASE_CHANNEL}}-${{env.GIT_VERSION}}
           tags: ${{ steps.meta.outputs.tags }}
           platforms: linux/amd64,linux/arm64
