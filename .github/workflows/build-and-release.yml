@@ -3,9 +3,20 @@ name: Docker Extension for Kanvas
 on:
   release:
     types: [published] # Runs only when a new release is published
+  workflow_call:
+    inputs:
+      tag_name:
+        description: 'The release tag name (e.g., v1.0.0)'
+        required: true
+        type: string
+      release_channel:
+        description: 'Release channel (stable or edge)'
+        required: false
+        type: string
+        default: 'stable'
 
 env:
-  GIT_TAG: ${{ github.event.release.tag_name }}
+  GIT_TAG: ${{ github.event.release.tag_name || inputs.tag_name }}
 
 jobs:
   derive-version-info:
@@ -18,16 +29,30 @@ jobs:
       - name: Set version variables from tag
         id: set-vars
         run: |
-          TAG_NAME="${{ github.event.release.tag_name }}"
+          # Get tag name from either release event or workflow_call input
+          TAG_NAME="${{ env.GIT_TAG }}"
           echo "Detected tag: $TAG_NAME"
+
+          # Validate tag name format to prevent command injection
+          # Allows semver patterns like v1.0.0, 1.0.0, v1.0.0-alpha.1, edge-latest, etc.
+          if [[ ! "$TAG_NAME" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*$ ]]; then
+            echo "Error: Invalid tag name format."
+            exit 1
+          fi
 
           # Strip 'v' from version tag if it exists
           STRIPPED_VERSION="${TAG_NAME#v}"
 
-          # Use 'stable' if it's a tagged release, else fallback to 'edge'
-          if [[ "$TAG_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+          # Determine release channel
+          # When workflow_call is used, inputs.release_channel is available
+          # When release event is used, determine channel from tag pattern
+          if [[ "${{ github.event_name }}" == "workflow_call" ]]; then
+            CHANNEL="${{ inputs.release_channel }}"
+          elif [[ "$TAG_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+            # Use 'stable' if it's a tagged release matching semver pattern
             CHANNEL="stable"
           else
+            # Fallback to 'edge'
             CHANNEL="edge"
           fi
 
@@ -49,7 +74,20 @@ jobs:
       - name: Generate release notes
         id: release_notes
         run: |
-          RELEASE_NOTES=$(gh release create ${{ github.ref_name }} --generate-notes --repo ${{ github.repository }} | tail -n +2)  # Get generated release notes, excluding the first line
+          # Use tag from environment variable (set from release event or workflow_call input)
+          TAG_NAME="${{ env.GIT_TAG }}"
+
+          # Try to fetch release notes if the release exists
+          if gh release view "$TAG_NAME" &> /dev/null; then
+            RELEASE_NOTES=$(gh release view "$TAG_NAME" --json body -q .body)
+            # Use default message if release notes are empty
+            if [[ -z "$RELEASE_NOTES" ]]; then
+              RELEASE_NOTES="Docker Extension build for Kanvas $TAG_NAME"
+            fi
+          else
+            RELEASE_NOTES="Docker Extension build for Kanvas $TAG_NAME"
+          fi
+
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
           echo "$RELEASE_NOTES" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
@@ -72,9 +110,8 @@ jobs:
           tags: |
             type=raw,value=${{env.RELEASE_CHANNEL}}-{{sha}}
             type=semver,pattern={{version}},value=${{env.GIT_STRIPPED_VERSION}}
-            type=raw,value=${{env.RELEASE_CHANNEL}}-{{tag}},enable=${{ startsWith(github.ref, 'refs/tags/v') }}
+            type=raw,value=${{env.RELEASE_CHANNEL}}-${{env.GIT_VERSION}}
             type=raw,value=${{env.RELEASE_CHANNEL}}-latest
-            type=raw,value=${{env.RELEASE_CHANNEL}}-${{env.GIT_VERSION}},enable=${{ startsWith(github.ref, 'refs/tags/v') }}
 
       - name: Login to DockerHub
         uses: docker/login-action@v3
@@ -92,5 +129,5 @@ jobs:
             GIT_VERSION=${{env.GIT_VERSION}}
             RELEASE_CHANNEL=${{env.RELEASE_CHANNEL}}
             RELEASE_NOTES=${{ env.RELEASE_NOTES }}
-          tags: ${{ steps.meta.outputs.tags }}, ${{ github.ref_name }}
+          tags: ${{ steps.meta.outputs.tags }}
           platforms: linux/amd64,linux/arm64
