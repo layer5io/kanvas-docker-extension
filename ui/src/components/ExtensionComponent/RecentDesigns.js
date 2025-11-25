@@ -68,10 +68,10 @@ export default function RecentDesignsCard({ isDarkTheme }) {
 
   const openDesign = (design) => {
     const name = design.name.replace(" ", "-").toLowerCase();
-    // const url = `http://localhost:9081/extension/meshmap?mode=design&design=${design.id}`;
-    const url = `https://cloud.layer5.io/catalog/content/my-designs/${name}-${design.id}?source=%257B%2522type%2522%253A%2522my-designs%2522%257D`;
+    const kanvasURL = `http://localhost:9081/extension/meshmap?mode=design&design=${design.id}`;
+    const myDesignsURL = `https://cloud.layer5.io/catalog/content/my-designs/${name}-${design.id}?source=%257B%2522type%2522%253A%2522my-designs%2522%257D`;
 
-    window.ddClient.host.openExternal(url);
+    window.ddClient.host.openExternal(myDesignsURL);
     // window.location.href = url;
   };
 
