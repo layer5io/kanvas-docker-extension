@@ -106,7 +106,7 @@ export default function RecentDesignsCard({ isDarkTheme }) {
                     edge="end"
                     aria-label="open"
                   >
-                    <ExternalLinkIcon fill="#eee" />
+                    <ExternalLinkIcon width="16" fill="#eee" />
                   </IconButton>
                 }
               >
