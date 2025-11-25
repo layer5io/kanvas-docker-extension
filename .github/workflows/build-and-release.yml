@@ -27,6 +27,7 @@ on:
         default: "stable"
 env:
   GIT_TAG: ${{ github.event.release.tag_name || inputs.tag_name }}
+  RELEASE_CHANNEL: ${{ inputs.release_channel }}
 
 jobs:
   derive-version-info:
@@ -54,11 +55,11 @@ jobs:
           STRIPPED_VERSION="${TAG_NAME#v}"
 
           # Determine release channel
-          CHANNEL="${{ inputs.release_channel }}"
+          RELEASE_CHANNEL="${{ inputs.release_channel }}"
 
           echo "GIT_VERSION=$TAG_NAME" >> $GITHUB_OUTPUT
           echo "GIT_STRIPPED_VERSION=$STRIPPED_VERSION" >> $GITHUB_OUTPUT
-          echo "RELEASE_CHANNEL=$CHANNEL" >> $GITHUB_OUTPUT
+          echo "RELEASE_CHANNEL=$RELEASE_CHANNEL" >> $GITHUB_OUTPUT
 
   docker-extension:
     needs: derive-version-info
@@ -69,7 +70,7 @@ jobs:
       RELEASE_CHANNEL: ${{ needs.derive-version-info.outputs.RELEASE_CHANNEL }}
     steps:
       - name: Checkout 🛎️ repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup image tags in docker-compose.yaml
         run: |
