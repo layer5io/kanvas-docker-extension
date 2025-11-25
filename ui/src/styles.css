@@ -1,7 +1,48 @@
-.sans-serif { font-family: -apple-system, 'avenir next', avenir, roboto, noto, 'helvetica neue', helvetica, ubuntu, 'franklin gothic medium', 'century gothic', sans-serif; }
+/* Qanelas Soft font family - used by Sistent theme */
+@font-face {
+    font-family: "Qanelas Soft Regular";
+    src: url('./assets/fonts/qanelas-soft/QanelasSoftRegular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
 
-*{
-    margin:0;
+@font-face {
+    font-family: "Qanelas Soft Regular";
+    src: url('./assets/fonts/qanelas-soft/QanelasSoftMedium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Qanelas Soft Regular";
+    src: url('./assets/fonts/qanelas-soft/QanelasSoftSemiBold.otf') format('opentype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Qanelas Soft Regular";
+    src: url('./assets/fonts/qanelas-soft/QanelasSoftBold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Global font family - matches Sistent theme typography */
+* {
+    margin: 0;
     padding: 0;
+    font-family: "Qanelas Soft Regular", "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+body {
+    font-family: "Qanelas Soft Regular", "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+.sans-serif { 
+    font-family: "Qanelas Soft Regular", "Roboto", "Helvetica", "Arial", sans-serif;
 }
 
