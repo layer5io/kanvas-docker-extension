@@ -27,7 +27,8 @@ import {
   CircularProgress,
 } from "@sistent/sistent";
 
-import KanvasColor from "../../img/SVGs/kanvasColor";
+// import KanvasColor from "../../img/SVGs/kanvasColor";
+import KanvasWhite from "../../img/SVGs/kanvasWhite";
 import DocsIcon from "../../img/SVGs/docsIcon";
 import KanvasHorizontalLight from "../../img/SVGs/KanvasHorizontalLight";
 
@@ -100,7 +101,6 @@ const LaunchKanvasSection = ({ isDarkTheme }) => {
       sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
     >
       <AccountDiv>
-        <KanvasColor height={70} width={72} style={{ marginBottom: "1rem" }} />
         <StyledButton
           variant="contained"
           component="span"
@@ -108,8 +108,10 @@ const LaunchKanvasSection = ({ isDarkTheme }) => {
             window.location.href = proxyUrl + "/extension/meshmap";
             setLaunching(true);
           }}
-        >
-          <MuiBox display={"flex"} gap={2} alignItems="center">
+          sx={{margin:"0"}}
+        > <KanvasWhite height={48} width={48} sx={{margin:"0", padding:"0"}}  />
+
+          <MuiBox display={"flex"} gap={0} sx={{margin:"0", padding:"0"}} alignItems="center">
             {launching && (
               <CircularProgress
                 sx={{
@@ -125,10 +127,11 @@ const LaunchKanvasSection = ({ isDarkTheme }) => {
         </StyledButton>
         <StyledLink
           style={{
-            color: "#eee",
+            color: "#ccc",
             cursor: "pointer",
             marginTop: "0.55rem",
             padding: "0px",
+            fontSize: ".9rem"
           }}
           onClick={openInExternalWindow}
         >
@@ -180,7 +183,21 @@ const ImportDesignSection = ({ isDarkTheme }) => {
     <ExtensionWrapper
       sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
     >
+      
       <AccountDiv>
+        <Box
+          display="inline"
+          position="relative"
+          justifySelf="flex-end"
+          alignSelf="flex-start"
+          margin="-1.5rem 0rem 1rem -.5rem"
+        >
+       <CustomTooltip title="Supported formats: Helm chart, Kubernetes manifest, Kustomize, and Docker Compose. Learn more at https://docs.layer5.io/kanvas/getting-started/">
+            <div>
+              <InfoCircleIcon height={24} width={24} />
+            </div>
+          </CustomTooltip>
+          </Box>
         <Box
           display="flex"
           justifyContent="space-between"
@@ -188,26 +205,25 @@ const ImportDesignSection = ({ isDarkTheme }) => {
           gap={1}
           mb={2}
         >
-          <Typography whiteSpace="nowrap">Import Design File</Typography>
-          <CustomTooltip title="Supported formats: Helm chart, Kubernetes manifest, Kustomize, and Docker Compose. Learn more at https://docs.layer5.io/kanvas/getting-started/">
-            <div>
-              <InfoCircleIcon height={24} width={24} />
-            </div>
-          </CustomTooltip>
+          <Typography variant="h6" whiteSpace="nowrap">Import Design File</Typography>
+         
         </Box>
         <label htmlFor="upload-button">
-          <StyledButton variant="contained" component="span">
+          <StyledButton variant="contained" component="span" sx={{  padding: "1rem 3.5rem"}}  >
             <input
               id="upload-button"
               type="file"
               accept=".yaml, .yml, .json, .zip, .tar , .tar.gz"
               hidden
               onChange={handleImport}
+              
             />
             Browse...
           </StyledButton>
         </label>
+         
       </AccountDiv>
+      
     </ExtensionWrapper>
   );
 };
