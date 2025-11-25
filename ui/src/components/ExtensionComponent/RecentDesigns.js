@@ -118,6 +118,10 @@ export default function RecentDesignsCard({ isDarkTheme }) {
                 onClick={() => openDesignInKanvas(design)}
                 style={{ cursor: "pointer" }}
                 divider
+                sx={{  "&:hover": {
+                  backgroundColor: isDarkTheme ? "#4F5B69" : "#C0C7CB", // A shade darker
+                },
+}}
                 secondaryAction={
                   <IconButton
                     onClick={(e) => {
@@ -125,13 +129,14 @@ export default function RecentDesignsCard({ isDarkTheme }) {
                       openDesignInCloud(design);
                     }}
                     edge="end"
-                    aria-label="open in cloud"
-                  >
-                    <ExternalLinkIcon width="16" fill="#eee" />
+                    aria-label="open"
+                    sx={{ "&:hover": { "& svg": { fill: "#00b39f" } } }}
+                    >
+                   <ExternalLinkIcon width="16" fill="#ccc"  />
                   </IconButton>
                 }
               >
-                <ListItemIcon>
+                <ListItemIcon sx={{ minWidth: "32px"}}>
                   <DesignIcon />
                 </ListItemIcon>
                 <ListItemText primary={design.name} style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap", marginRight: "1rem" }} />
