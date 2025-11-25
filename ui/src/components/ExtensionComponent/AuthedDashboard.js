@@ -9,7 +9,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-
+import { ExternalLinkIcon } from "@sistent/sistent";
 import {
   AccountDiv,
   ExtensionWrapper,
@@ -127,12 +127,13 @@ const LaunchKanvasSection = ({ isDarkTheme }) => {
           style={{
             color: "#eee",
             cursor: "pointer",
-            marginTop: "0.25rem",
+            marginTop: "0.55rem",
             padding: "0px",
           }}
           onClick={openInExternalWindow}
         >
-          Open in external window
+          open in external window
+          <ExternalLinkIcon width="12" fill="#eee" />
         </StyledLink>
       </AccountDiv>
     </ExtensionWrapper>
