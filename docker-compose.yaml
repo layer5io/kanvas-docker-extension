@@ -4,11 +4,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: layer5/kanvas-docker-extension:${EXTENSION_TAG}
+    image: layer5/kanvas-docker-extension:stable-latest
     ports:
       - "7877:7877"
   meshery:
-    image: layer5/meshery:${EXTENSION_TAG}
+    image: layer5/meshery:kanvas-latest
     pull_policy: always
     environment:
       - "PROVIDER_BASE_URLS=https://cloud.layer5.io"
