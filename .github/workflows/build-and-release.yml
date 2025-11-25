@@ -74,7 +74,7 @@ jobs:
       - name: Setup image tags in docker-compose.yaml
         run: |
           sed -i "s/kanvas-docker-extension:stable-latest/kanvas-docker-extension:${RELEASE_CHANNEL}-${GIT_VERSION}/g" docker-compose.yaml
-          sed -i "s/meshery:kanvas-latest/kanvas-${GIT_VERSION}/g" docker-compose.yaml
+          sed -i "s/meshery:kanvas-latest/meshery:kanvas-${GIT_VERSION}/g" docker-compose.yaml
           cat docker-compose.yaml
 
       - name: Generate release notes
