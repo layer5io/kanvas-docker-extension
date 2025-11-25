@@ -66,13 +66,15 @@ export default function RecentDesignsCard({ isDarkTheme }) {
       );
   }, [fetchRecentDesigns]);
 
-  const openDesign = (design) => {
-    const name = design.name.replace(" ", "-").toLowerCase();
-    const kanvasURL = `http://localhost:9081/extension/meshmap?mode=design&design=${design.id}`;
-    const myDesignsURL = `https://cloud.layer5.io/catalog/content/my-designs/${name}-${design.id}?source=%257B%2522type%2522%253A%2522my-designs%2522%257D`;
+  const openDesignInKanvas = (design) => {
+    const kanvasURL = `http://localhost:9081/extension/meshmap?mode=design&design=${encodeURIComponent(design.id)}`;
+    window.location.href = kanvasURL;
+  };
 
+  const openDesignInCloud = (design) => {
+    const name = encodeURIComponent(design.name.replace(/\s+/g, "-").toLowerCase());
+    const myDesignsURL = `https://cloud.layer5.io/catalog/content/my-designs/${name}-${design.id}?source=%257B%2522type%2522%253A%2522my-designs%2522%257D`;
     window.ddClient.host.openExternal(myDesignsURL);
-    // window.location.href = url;
   };
 
   return (
@@ -113,14 +115,17 @@ export default function RecentDesignsCard({ isDarkTheme }) {
             {designs.map((design) => (
               <ListItem
                 key={design.id}
-                onClick={() => openDesign(design)}
+                onClick={() => openDesignInKanvas(design)}
                 style={{ cursor: "pointer" }}
                 divider
                 secondaryAction={
                   <IconButton
-                    onClick={() => openDesign(design)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openDesignInCloud(design);
+                    }}
                     edge="end"
-                    aria-label="open"
+                    aria-label="open in cloud"
                   >
                     <ExternalLinkIcon width="16" fill="#eee" />
                   </IconButton>
