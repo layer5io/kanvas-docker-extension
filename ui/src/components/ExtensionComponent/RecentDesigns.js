@@ -116,17 +116,22 @@ export default function RecentDesignsCard({ isDarkTheme }) {
                 onClick={() => openDesign(design)}
                 style={{ cursor: "pointer" }}
                 divider
+                sx={{  "&:hover": {
+                  backgroundColor: isDarkTheme ? "#4F5B69" : "#C0C7CB", // A shade darker
+                },
+}}
                 secondaryAction={
                   <IconButton
                     onClick={() => openDesign(design)}
                     edge="end"
                     aria-label="open"
-                  >
-                    <ExternalLinkIcon width="16" fill="#eee" />
+                    sx={{ "&:hover": { "& svg": { fill: "#00b39f" } } }}
+                    >
+ <ExternalLinkIcon width="16" fill="#ccc"  />
                   </IconButton>
                 }
               >
-                <ListItemIcon>
+                <ListItemIcon sx={{ minWidth: "32px"}}>
                   <DesignIcon />
                 </ListItemIcon>
                 <ListItemText primary={design.name} style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap", marginRight: "1rem" }} />
