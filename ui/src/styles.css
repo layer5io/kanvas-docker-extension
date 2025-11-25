@@ -1,7 +1,7 @@
 /* Qanelas Soft font family - used by Sistent theme */
 @font-face {
     font-family: "Qanelas Soft Regular";
-    src: url('https://raw.githubusercontent.com/layer5io/layer5/master/static/fonts/qanelas-soft/QanelasSoftRegular.otf') format('opentype');
+    src: url('./assets/fonts/qanelas-soft/QanelasSoftRegular.otf') format('opentype');
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -9,7 +9,7 @@
 
 @font-face {
     font-family: "Qanelas Soft Regular";
-    src: url('https://raw.githubusercontent.com/layer5io/layer5/master/static/fonts/qanelas-soft/QanelasSoftMedium.otf') format('opentype');
+    src: url('./assets/fonts/qanelas-soft/QanelasSoftMedium.otf') format('opentype');
     font-weight: 500;
     font-style: normal;
     font-display: swap;
@@ -17,7 +17,7 @@
 
 @font-face {
     font-family: "Qanelas Soft Regular";
-    src: url('https://raw.githubusercontent.com/layer5io/layer5/master/static/fonts/qanelas-soft/QanelasSoftSemiBold.otf') format('opentype');
+    src: url('./assets/fonts/qanelas-soft/QanelasSoftSemiBold.otf') format('opentype');
     font-weight: 600;
     font-style: normal;
     font-display: swap;
@@ -25,7 +25,7 @@
 
 @font-face {
     font-family: "Qanelas Soft Regular";
-    src: url('https://raw.githubusercontent.com/layer5io/layer5/master/static/fonts/qanelas-soft/QanelasSoftBold.otf') format('opentype');
+    src: url('./assets/fonts/qanelas-soft/QanelasSoftBold.otf') format('opentype');
     font-weight: 700;
     font-style: normal;
     font-display: swap;
