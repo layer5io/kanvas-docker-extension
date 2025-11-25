@@ -9,9 +9,9 @@ import {
   IconButton,
   Typography,
   CircularProgress,
-  Box,
+  Box
 } from "@mui/material";
-import { ExternalLinkIcon } from "@sistent/sistent";
+import { ExternalLinkIcon, CustomTooltip, InfoCircleIcon } from "@sistent/sistent";
 import { DesignIcon } from "@sistent/sistent";
 
 import { getFormatDate } from "@sistent/sistent";
@@ -80,7 +80,23 @@ export default function RecentDesignsCard({ isDarkTheme }) {
       isDarkTheme={isDarkTheme}
       sx={{ flexDirection: "column", pt: "0.5rem", pb: "0.5rem" }}
     >
-      <CardHeader title="Recent Designs" />
+      <Box display="flex" justifyContent="center"
+          alignContent="center" width="100%">
+        <Box display="flex" justifySelf="center"
+          sx={{display:"flex", margin:"auto", marginRight:"-1rem",
+          alignSelf:"flex-start", justifySelf:"center", flexDirection:
+          "row", }}
+          alignSelf="flex-start">
+          <CustomTooltip 
+            title="Designs in this list are those owned by you, available in your currently selected Organization and Workspace. Learn more about Spaces at https://docs.layer5.io/cloud/spaces/">
+            <div>
+              <InfoCircleIcon height={24} width={24} />
+            </div>
+          </CustomTooltip>
+          </Box>
+        <CardHeader title="Recent Designs" 
+        sx={{flexGrow:1}} />
+      </Box>
       <CardContent>
         {loading ? (
           <Box display="flex" justifyContent="center" my={3}>

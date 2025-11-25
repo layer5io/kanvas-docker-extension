@@ -100,7 +100,7 @@ export const StyledButton = styled(ButtonBase)(({ style }) => ({
   borderRadius: "5px",
   fontSize: "1rem",
   color: "white",
-  padding: "10px 20px",
+  padding: "10px 20px 10px 15px",
   "&:hover": {
     boxShadow:
       "0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.19)",
@@ -122,7 +122,7 @@ export const LinkButton = styled(ButtonBase)(() => ({
 }));
 
 export const StyledLink = styled("a")(() => ({
-  padding: "10px 20px",
+  padding: "10px 0px 10px 5px",
   borderRadius: "5px",
   color: "white",
 }));
