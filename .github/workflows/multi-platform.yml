@@ -28,7 +28,7 @@ on:
 env:
   GIT_VERSION: ${{github.event.inputs.release-ver}}
   GIT_STRIPPED_VERSION: ${{github.event.inputs.stripped-release-ver}}
-  RELEASE_CHANNEL: ${{github.event.inputs.release-channel || | inputs.release_channel }}
+  RELEASE_CHANNEL: ${{github.event.inputs.release-channel || inputs.release_channel }}
   GIT_TAG: ${{ github.event.release.tag_name }}
 
 jobs:
