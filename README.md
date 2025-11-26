@@ -27,7 +27,7 @@
 
 [Kanvas](https://layer5.io/kanvas) delivers collaborative and visual configuration management offering lifecycle, configuration, and performance management of Kubernetes, public Clouds, and your workloads.
 
-# Kanvas Extension for Docker
+# Kanvas Extension for Docker ([open in Docker Hub](https://hub.docker.com/r/layer5/kanvas-docker-extension))
 
 ### What is Kanvas?
 
