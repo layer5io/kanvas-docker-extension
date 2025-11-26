@@ -1,4 +1,4 @@
-name: Docker Extension for Kanvas
+name: Build and release docker extension
 
 on:
   release:
