@@ -10,38 +10,43 @@ on:
   #   paths-ignore:
   #     - "docs/**"
       # - '.github/**'
-  workflow_dispatch:
+  workflow_call:
     inputs:
+      RELEASE_CHANNEL:
+        description: "Release channel (stable or edge)"
+        required: true
+        type: string
+        default: "stable"
       release-ver:
         description: "Stable Release Version"
         required: true
         default: "v"
-      stripped-release-ver:
-        description: "Stripped Stable Release Version"
+        type: string
+
+  workflow_dispatch:
+    inputs:
+      RELEASE_CHANNEL:
+        description: "Release channel (stable or edge)"
         required: true
-        default: ""
-      release-channel:
-        description: "Release Channel"
-        required: true
+        type: string
         default: "stable"
+      release-ver:
+        description: "Stable Release Version"
+        required: true
+        default: "v"
+        type: string
 
 env:
   GIT_VERSION: ${{github.event.inputs.release-ver}}
-  GIT_STRIPPED_VERSION: ${{github.event.inputs.stripped-release-ver}}
-  RELEASE_CHANNEL: ${{github.event.inputs.release-channel || inputs.release_channel }}
-  GIT_TAG: ${{ github.event.release.tag_name }}
+  RELEASE_CHANNEL: ${{github.event.inputs.RELEASE_CHANNEL || inputs.RELEASE_CHANNEL }}
 
 jobs:
   print-inputs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "Dispatched GIT_VERSION: ${{github.event.inputs.release-ver}}"
-          echo " Dispatched GIT_STRIPPED_VERSION: ${{github.event.inputs.stripped-release-ver}}"
           echo "Env RELEASE_CHANNEL: ${{env.RELEASE_CHANNEL}}"
           echo "Env GIT_VERSION: ${{env.GIT_VERSION}}"
-          echo "Env GIT_STRIPPED_VERSION: ${{env.GIT_STRIPPED_VERSION}}"
-          echo "Env GIT_TAG: ${{ github.event.release.tag_name }}"
 
   docker-build:
     runs-on: ubuntu-latest
@@ -49,21 +54,12 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
       - name: Identify Release Values
-        if: "${{ github.event.inputs.release-ver}} != 'v' }}"
         run: |
-          # GIT_REF=`git symbolic-ref HEAD`
-          if [[ $GIT_TAG = refs/tags* ]]
-          then
-            echo "RELEASE_CHANNEL=stable" >> $GITHUB_ENV
-          else
-            echo "RELEASE_CHANNEL=edge" >> $GITHUB_ENV
-          fi
-          echo "Release channel determined to be $RELEASE_CHANNEL"
-          LATEST_VERSION=$(git ls-remote --tags | tail -1 | cut -f2 | sed 's/refs\/tags\///g')
-          GIT_VERSION=$(git ls-remote --tags | tail -1 | cut -f2 | sed 's/refs\/tags\///g')
+          # LATEST_VERSION=$(git ls-remote --tags | tail -1 | cut -f2 | sed 's/refs\/tags\///g')
+          # GIT_VERSION=$(git ls-remote --tags | tail -1 | cut -f2 | sed 's/refs\/tags\///g')
           # GIT_VERSION=$(git describe --tags `git rev-list --tags --max-count=1` --always)
-          GIT_STRIPPED_VERSION=$(git ls-remote --tags | tail -1 | cut -f2 | sed 's/refs\/tags\///g' | cut -c2-)
-          echo "GIT_LATEST=$LATEST_VERSION" >> $GITHUB_ENV
+          GIT_STRIPPED_VERSION=$(echo $GIT_VERSION | cut -c2-)
+          # echo "GIT_LATEST=$LATEST_VERSION" >> $GITHUB_ENV
           echo "GIT_VERSION=$GIT_VERSION" >> $GITHUB_ENV
           echo "GIT_STRIPPED_VERSION=$GIT_STRIPPED_VERSION" >> $GITHUB_ENV
         shell: bash
@@ -72,6 +68,7 @@ jobs:
         id: release_notes
         run: |
           RELEASE_NOTES=$(gh release create ${{ github.ref_name }} --generate-notes --repo ${{ github.repository }} | tail -n +2)  # Get generated release notes, excluding the first line
+          RELEASE_NOTES="$RELEASE_NOTES\nSee https://docs.layer5.io/kanvas/reference/releases/$GIT_VERSION"
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
           echo "$RELEASE_NOTES" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
