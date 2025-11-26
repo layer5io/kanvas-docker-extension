@@ -16,16 +16,10 @@ import {
   SectionWrapper,
   VersionText,
   StyledButton,
-  StyledLink,
+  StyledButtonLink,
 } from "./styledComponents";
 
-import {
-  SistentThemeProviderWithoutBaseLine,
-  InfoCircleIcon,
-  CustomTooltip,
-  Box,
-  CircularProgress,
-} from "@sistent/sistent";
+import { InfoCircleIcon, CustomTooltip, Box, CircularProgress,SistentThemeProvider } from "@sistent/sistent";
 
 // import KanvasColor from "../../img/SVGs/kanvasColor";
 import KanvasWhite from "../../img/SVGs/kanvasWhite";
@@ -35,6 +29,7 @@ import KanvasHorizontalLight from "../../img/SVGs/KanvasHorizontalLight";
 import { randomApplicationNameGenerator } from "../../utils";
 import { getBase64EncodedFile, getUnit8ArrayDecodedFile } from "../utils/file";
 import RecentDesignsCard, { refreshRecentDesignsEvent } from "./RecentDesigns";
+import QanelasSistentThemeProvider from "../../theme/QanelasSistentThemeProvider";
 
 const proxyUrl = "http://127.0.0.1:7877";
 
@@ -62,16 +57,18 @@ const HeaderSection = ({ isDarkTheme }) => (
     <MuiBox
       display="flex"
       justifyContent={"end"}
-      gap={2}
+      gap={4}
       alignItems={"center"}
-      mb={2}
+      m={2}
     >
+      <VersionInfoSection isDarkTheme={isDarkTheme} />
       <DocsButton
         isDarkTheme={isDarkTheme}
         onClick={() =>
           window.ddClient.host.openExternal("https://docs.layer5.io/kanvas/")
         }
-      />
+      />      
+
       <UserAccountSection isDarkTheme={isDarkTheme} />
     </MuiBox>
     <MuiBox display="flex" justifyContent="center" mb={2}>
@@ -120,12 +117,12 @@ const LaunchKanvasSection = ({ isDarkTheme }) => {
                 size="24"
               />
             )}
-            <StyledLink style={{ color: "white" }}>
+            <StyledButtonLink style={{ color: "white" }}>
               {launching ? "Launching" : "Launch"} Kanvas
-            </StyledLink>
+            </StyledButtonLink>
           </MuiBox>
         </StyledButton>
-        <StyledLink
+        <StyledButtonLink
           style={{
             color: "#ccc",
             cursor: "pointer",
@@ -137,7 +134,7 @@ const LaunchKanvasSection = ({ isDarkTheme }) => {
         >
           open in external window
           <ExternalLinkIcon width="12" fill="#eee" />
-        </StyledLink>
+        </StyledButtonLink>
       </AccountDiv>
     </ExtensionWrapper>
   );
@@ -180,6 +177,7 @@ const ImportDesignSection = ({ isDarkTheme }) => {
   };
 
   return (
+
     <ExtensionWrapper
       sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
     >
@@ -332,7 +330,7 @@ export const Dasboard = ({ isDarkMode }) => {
   const isDarkTheme = isDarkMode;
 
   return (
-    <SistentThemeProviderWithoutBaseLine>
+    <QanelasSistentThemeProvider>
       <HeaderSection isDarkTheme={isDarkTheme} />
       <SectionWrapper
         sx={{
@@ -355,7 +353,9 @@ export const Dasboard = ({ isDarkMode }) => {
       </SectionWrapper>
         <RecentDesignsCard isDarkTheme={isDarkMode} />
       </SectionWrapper>
-      <VersionInfoSection isDarkTheme={isDarkMode} />
-    </SistentThemeProviderWithoutBaseLine>
+                    </QanelasSistentThemeProvider>
+
+
+
   );
 };

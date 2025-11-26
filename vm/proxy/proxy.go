@@ -101,7 +101,7 @@ func handleWsMessage(conn *websocket.Conn) {
 
 func (p *Proxy) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
 
-	log.Println("Received request woo: ", req.Method, " ", req.URL.Path)
+	log.Println("Received request: ", req.Method, " ", req.URL.Path)
 	log.Println(req.RemoteAddr, " ", req.Method, " ", req.URL)
 
 	client := &http.Client{}
@@ -174,7 +174,7 @@ func (p *Proxy) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
 				htmlTemplate := `<html>
 
 <head>
-  <title>Meshery | Docker Desktop</title>
+  <title>Kanvas | Docker Desktop</title>
 </head>
 
 <body>

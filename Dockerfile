@@ -65,8 +65,8 @@ LABEL org.opencontainers.image.title="Kanvas" \
   com.docker.desktop.extension.icon="https://raw.githubusercontent.com/layer5io/kanvas-docker-extension/master/assets/kanvas-mark-logo-light.svg" \
   com.docker.extension.publisher-url="https://layer5.io" \
   com.docker.extension.categories="kubernetes, cloud-deployment" \
-  com.docker.extension.changelog="$RELEASE_NOTES" \
-  com.docker.extension.additional-urls="[{\"title\":\"Documentation\",\"url\":\"https://docs.layer5.io\"},{\"title\":\"Project\",\"url\":\"https://layer5.io\"},{\"title\":\"Slack\",\"url\":\"https://slack.layer5.io\"},{\"title\":\"Discussion Forum\",\"url\":\"https://layer5.io/community#community-forums\"}]"
+  com.docker.extension.changelog="See https://docs.layer5.io/kanvas/reference/releases/$EXTENSION_TAG" \
+  com.docker.extension.additional-urls="[{\"title\":\"Documentation\",\"url\":\"https://docs.layer5.io\"},{\"title\":\"Videos\",\"url\":\"https://docs.layer5.io\videos\"},{\"title\":\"Slack\",\"url\":\"https://slack.layer5.io\"},{\"title\":\"Discussion Forum\",\"url\":\"https://discuss.layer5.io\"}]"
 COPY --from=builder /backend/bin/service /
 
 ENV EXTENSION_TAG=$EXTENSION_TAG

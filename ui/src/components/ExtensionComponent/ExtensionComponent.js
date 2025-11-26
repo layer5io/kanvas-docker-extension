@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Typography } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import DocsIcon from "../../img/SVGs/docsIcon";
 import KanvasHorizontalLight from "../../img/SVGs/KanvasHorizontalLight";
 import { DockerMuiThemeProvider } from "@docker/docker-mui-theme";
-import CssBaseline from "@mui/material/CssBaseline";
 import { LoadComp } from "../LoadingComponent/LoadComp";
 import {
   LoadingDiv,
@@ -13,10 +11,18 @@ import {
   ComponentWrapper,
   SectionWrapper,
   StyledButton,
+  StyledLink
 } from "./styledComponents";
-import { SistentThemeProviderWithoutBaseLine } from "@sistent/sistent";
+import {
+  InfoCircleIcon,
+  Box,
+  Typography,
+  CssBaseline,
+  CustomTooltip,
+} from "@sistent/sistent";
 import { providerUrl } from "../utils/constants";
 import { Dasboard } from "./AuthedDashboard";
+import QanelasSistentThemeProvider from "../../theme/QanelasSistentThemeProvider";
 
 // Fallback theme provider for when Docker extension themes aren't available
 const DockerMuiThemeProviderWithFallback = ({ children }) => {
@@ -331,6 +337,28 @@ const ExtensionsComponent = () => {
     window.ddClient.host.openExternal(`https://docs.layer5.io/kanvas/`);
   };
 
+  const signInTooltipTitle = (
+    <div>
+      <Typography variant="subtitle1" fontWeight="bold">
+        Why do I need to sign in?
+      </Typography>
+      {/* <Typography variant="body1" component="p" sx={{ mt: 0.5 }}>
+        Sign in for the following benefits:
+      </Typography> */}
+      <ul style={{listStylePosition: "inside", paddingLeft:"1rem"}}>
+        <li>to save your work</li>
+        <li>to collaborate with others</li>
+        <li>to securely connect your infrastructure</li>
+      </ul>
+       <Typography variant="body1" component="p" sx={{ mt: 0.5 }}>
+        It's free. 
+        Learn more at {" "}
+          <a href="https://docs.layer5.io/cloud" style={{color:"#00b39f"}}>
+          docs.layer5.io/cloud</a>
+      </Typography>
+    </div>
+  );
+
   if (isLoggedIn && token) {
     return (
       <DockerMuiThemeProviderWithFallback>
@@ -341,6 +369,7 @@ const ExtensionsComponent = () => {
   }
 
   return (
+
     <DockerMuiThemeProviderWithFallback>
       <CssBaseline />
       {changing && (
@@ -349,7 +378,7 @@ const ExtensionsComponent = () => {
         </LoadingDiv>
       )}
       <ComponentWrapper sx={{ opacity: changing ? "0.3" : "1" }}>
-        <SistentThemeProviderWithoutBaseLine>
+        <QanelasSistentThemeProvider>
           <StyledButton
             size="small"
             onClick={() => OpenDocs()}
@@ -368,57 +397,106 @@ const ExtensionsComponent = () => {
             />
             &nbsp;Docs
           </StyledButton>
-        </SistentThemeProviderWithoutBaseLine>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-evenly",
-          }}
-        >
-          <div>
-            <KanvasHorizontalLight
-              width="600"
-              height="auto"
-              CustomColor={isDarkTheme ? "white" : "#3C494F"}
-            />
-
-            <Typography sx={{ margin: "auto", paddingTop: "-1rem" }}>
-              Design and operate your cloud native deployments with Kanvas.
-            </Typography>
-          </div>
-        </div>
-
-        <SectionWrapper>
-          <ExtensionWrapper
-            className="third-step"
-            sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-evenly",
+            }}
           >
-            <AccountDiv>
-              {!isLoggedIn ? (
-                <StyledButton
-                  sx={{ marginTop: "0.3rem" }}
-                  variant="contained"
-                  disabled={isLoggedIn}
-                  color="primary"
-                  component="span"
-                  onClick={() => {
-                    const url =
-                      providerUrl +
-                      "?source=aHR0cDovL2xvY2FsaG9zdDo3ODc3L3Rva2VuL3N0b3Jl&provider_version=v0.3.14";
-                    console.log("provider url", url);
-                    window?.ddClient?.host?.openExternal?.(url);
-                  }}
-                >
-                  Login
-                </StyledButton>
-              ) : (
-                <></>
-              )}
-            </AccountDiv>
-          </ExtensionWrapper>
-        </SectionWrapper>
+            <div>
+              <KanvasHorizontalLight
+                width="600"
+                height="auto"
+                CustomColor={isDarkTheme ? "white" : "#3C494F"}
+              />
+
+              <Typography sx={{ margin: "auto", paddingTop: "-1rem" }}>
+                Design and operate your cloud native deployments with Kanvas.
+              </Typography>
+            </div>
+          </div>
+        
+          <SectionWrapper>
+            <ExtensionWrapper
+              className="third-step"
+              sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
+            ><Box
+          display="inline"
+          position="relative"
+          justifySelf="flex-end"
+          alignSelf="flex-start"
+          margin="-.5rem 0rem 1rem -.5rem"
+        >
+
+       <CustomTooltip title={signInTooltipTitle}>
+            <div>
+              <InfoCircleIcon height={24} width={24} />
+            </div>
+          </CustomTooltip>
+          </Box>
+              <AccountDiv>
+                {!isLoggedIn ? (
+                  <Box sx={{ flexDirection: "row", alignItems:"start", margin: "auto" }}>
+                     
+                    <Box
+                      display="flex"
+                      flexDirection="row"
+                      gap={1}
+                      alignItems="center"
+                      mb={2}
+
+                    >
+                      {/* <Typography variant="h6" whiteSpace="nowrap">
+                        Login to Layer5 Cloud
+                      </Typography> */}
+
+                      <StyledButton
+                        variant="contained"
+                        disabled={isLoggedIn}
+                        color="primary"
+                        component="span"
+                        onClick={() => {
+                          const url =
+                            providerUrl +
+                            "/registration?source=aHR0cDovL2xvY2FsaG9zdDo3ODc3L3Rva2VuL3N0b3Jl&provider_version=v0.3.14";
+                          console.log("provider url", url);
+                          window?.ddClient?.host?.openExternal?.(url);
+                        }}
+                      >
+                        Sign Up
+                      </StyledButton>
+
+                      <StyledButton
+                        variant="outlined"
+                        disabled={isLoggedIn}
+                        color="primary"
+                        component="span"
+                        onClick={() => {
+                          const url =
+                            providerUrl +
+                            "/login?source=aHR0cDovL2xvY2FsaG9zdDo3ODc3L3Rva2VuL3N0b3Jl&provider_version=v0.3.14";
+                          console.log("provider url", url);
+                          window?.ddClient?.host?.openExternal?.(url);
+                        }}
+                        sx={{backgroundColor: "transparent",border:"1px solid #00b39f"}}
+
+                      >
+                        Login
+                      </StyledButton>
+                    </Box>
+                    {/* <Typography sx={{color: "#ccc"}}>(free)</Typography> */}
+                    
+                  </Box>
+                ) : (
+                  <></>
+                )}
+              </AccountDiv>
+            </ExtensionWrapper>
+          </SectionWrapper>
+        </QanelasSistentThemeProvider>
       </ComponentWrapper>
     </DockerMuiThemeProviderWithFallback>
+    
   );
 };
 

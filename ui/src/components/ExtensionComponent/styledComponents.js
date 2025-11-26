@@ -15,6 +15,11 @@ export const AccountDiv = styled("div")(() => ({
   alignItems: "center",
 }));
 
+export const StyledLink = styled("a")(() => ({
+  color: "#00b39f",
+
+}));
+
 export const IconWrapper = styled("div")(({ theme }) => ({
   paddingInline: "2rem",
   paddingTop: "1rem",
@@ -109,6 +114,7 @@ export const StyledButton = styled(ButtonBase)(({ style }) => ({
     boxShadow:
       "0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.19)",
   },
+  textTransform: "uppercase",
   ...style,
 }));
 
@@ -125,7 +131,7 @@ export const LinkButton = styled(ButtonBase)(() => ({
   },
 }));
 
-export const StyledLink = styled("a")(() => ({
+export const StyledButtonLink = styled("a")(() => ({
   padding: "10px 0px 10px 5px",
   borderRadius: "5px",
   color: "white",
