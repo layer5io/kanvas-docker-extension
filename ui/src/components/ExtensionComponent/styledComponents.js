@@ -66,6 +66,10 @@ export const SectionWrapper = styled("div")(({ theme }) => ({
   flexWrap: "wrap",
   justifyContent: "center",
   alignItems: "center",
+  [theme.breakpoints.down("md")]: {
+    display: "flex",
+    flexDirection: "row",
+  }
 }));
 
 export const LoadingDiv = styled("div")(({ theme }) => ({

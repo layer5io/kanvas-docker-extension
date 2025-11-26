@@ -98,7 +98,7 @@ const LaunchKanvasSection = ({ isDarkTheme }) => {
 
   return (
     <ExtensionWrapper
-      sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
+      sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE", flexDirection:"column"}}
     >
       <AccountDiv>
         <StyledButton
@@ -342,8 +342,17 @@ export const Dasboard = ({ isDarkMode }) => {
           alignItems: "center",
         }}
       >
+        <SectionWrapper
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "1.5rem",
+          alignItems: "center",
+        }}
+      >
         <LaunchKanvasSection isDarkTheme={isDarkTheme} />
         <ImportDesignSection isDarkTheme={isDarkTheme} />
+      </SectionWrapper>
         <RecentDesignsCard isDarkTheme={isDarkMode} />
       </SectionWrapper>
       <VersionInfoSection isDarkTheme={isDarkMode} />
