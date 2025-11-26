@@ -411,7 +411,7 @@ const ExtensionsComponent = () => {
               />
 
               <Typography sx={{ margin: "auto", paddingTop: "-1rem" }}>
-                Design and operate your cloud native deployments with Kanvas.
+                Design and operate your cloud and cloud native infrastructure.
               </Typography>
             </div>
           </div>

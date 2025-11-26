@@ -79,7 +79,7 @@ const HeaderSection = ({ isDarkTheme }) => (
           CustomColor={isDarkTheme ? "white" : "#3C494F"}
         />
         <Typography>
-          Design and operate your cloud native deployments with Kanvas.
+          Design and operate your cloud and cloud native infrastructure.
         </Typography>
       </MuiBox>
     </MuiBox>
