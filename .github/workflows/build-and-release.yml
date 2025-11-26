@@ -135,7 +135,7 @@ jobs:
             GIT_STRIPPED_VERSION=${{env.GIT_STRIPPED_VERSION}}
             GIT_VERSION=${{env.GIT_VERSION}}
             RELEASE_CHANNEL=${{env.RELEASE_CHANNEL}}
-            RELEASE_NOTES=${{ env.RELEASE_NOTES }}
+            RELEASE_NOTES=${{ env.RELEASE_NOTES || "See https://docs.layer5.io/kanvas/reference/releases"}}
             KANVAS_TAG=${{env.RELEASE_CHANNEL}}-${{env.GIT_VERSION}}
             EXTENSION_TAG=${{env.RELEASE_CHANNEL}}-${{env.GIT_VERSION}}
           tags: ${{ steps.meta.outputs.tags }}
