@@ -12,7 +12,7 @@ on:
       # - '.github/**'
   workflow_call:
     inputs:
-      RELEASE_CHANNEL:
+      release-channel:
         description: "Release channel (stable or edge)"
         required: true
         type: string
@@ -25,7 +25,7 @@ on:
 
   workflow_dispatch:
     inputs:
-      RELEASE_CHANNEL:
+      release-channel:
         description: "Release channel (stable or edge)"
         required: true
         type: string
@@ -38,7 +38,7 @@ on:
 
 env:
   GIT_VERSION: ${{github.event.inputs.release-ver}}
-  RELEASE_CHANNEL: ${{github.event.inputs.RELEASE_CHANNEL || inputs.RELEASE_CHANNEL }}
+  RELEASE_CHANNEL: ${{github.event.inputs.release-channel || inputs.release-channel }}
 
 jobs:
   print-inputs:
