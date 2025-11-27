@@ -52,6 +52,11 @@ jobs:
             echo "❌ Error: GIT_VERSION is empty!"
             exit 1
           fi
+          
+          if [ ${#GIT_VERSION} -le 3 ]; then
+            echo "❌ Error: GIT_VERSION '${GIT_VERSION}' is too short. It must be > 3 characters."
+            exit 1
+          fi
 
           if [ -z "${{ env.RELEASE_CHANNEL }}" ]; then
             echo "❌ Error: RELEASE_CHANNEL is empty!"
@@ -70,8 +75,7 @@ jobs:
       - name: Identify Release Values
         run: |
           GIT_VERSION="${{ env.GIT_VERSION }}"
-          GIT_STRIPPED_VERSION=$(echo $GIT_VERSION | cut -c2-)
-          echo "GIT_STRIPPED_VERSION ${{GIT_STRIPPED_VERSION}}"
+          GIT_STRIPPED_VERSION="${GIT_VERSION#v}"
           echo "GIT_STRIPPED_VERSION=$GIT_STRIPPED_VERSION" >> $GITHUB_ENV
         shell: bash
 
