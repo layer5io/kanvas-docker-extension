@@ -37,22 +37,36 @@ on:
         type: string
 
 env:
-  GIT_VERSION: ${{github.event.inputs.release-ver}}
+  GIT_VERSION: ${{github.event.inputs.release-ver || inputs.release-ver }}
   RELEASE_CHANNEL: ${{github.event.inputs.release-channel || inputs.release-channel }}
 
 jobs:
-  print-inputs:
+  validate-inputs:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo "Env RELEASE_CHANNEL: ${{env.RELEASE_CHANNEL}}"
-          echo "Env GIT_VERSION: ${{env.GIT_VERSION}}"
+      - name: Validate inputs
+        run: |
+          echo "Validating GIT_VERSION and RELEASE_CHANNEL..."
+
+          if [ -z "${{ env.GIT_VERSION }}" ]; then
+            echo "❌ Error: GIT_VERSION is empty!"
+            exit 1
+          fi
+
+          if [ -z "${{ env.RELEASE_CHANNEL }}" ]; then
+            echo "❌ Error: RELEASE_CHANNEL is empty!"
+            exit 1
+          fi
+
+          echo "✓ Validation passed: GIT_VERSION=${{ env.GIT_VERSION }}, RELEASE_CHANNEL=${{ env.RELEASE_CHANNEL }}"
+
 
   docker-build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        
       - name: Identify Release Values
         run: |
           GIT_VERSION="${{ env.GIT_VERSION }}"
