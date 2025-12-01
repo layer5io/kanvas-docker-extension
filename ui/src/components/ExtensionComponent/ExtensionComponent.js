@@ -213,7 +213,7 @@ const ExtensionsComponent = () => {
       <Typography variant="body1" component="p" sx={{ mt: 0.5 }}>
         It's free. Learn more at{" "}
         <a
-          onClick={openExternalLink("https://docs.layer5.io/cloud")}
+          onClick={() => openExternalLink("https://docs.layer5.io/cloud")}
           style={{ color: "#00b39f" }}
         >
           docs.layer5.io/cloud

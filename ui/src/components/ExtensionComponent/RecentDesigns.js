@@ -83,6 +83,19 @@ export default function RecentDesignsCard({ isDarkTheme }) {
     window.ddClient.host.openExternal(myDesignsURL);
   };
 
+  const RecentDesignsTooltipTitle = (
+    <Typography variant="body1" component="p" sx={{ mt: 0.5 }}>
+      Designs in this list are those owned by you, available in your currently
+      selected Organization and Workspace. Learn more about Spaces at
+      <a
+        onClick={() => openExternalLink("https://docs.layer5.io/cloud/spaces/")}
+        style={{ color: "#00b39f" }}
+      >
+        https://docs.layer5.io/cloud/spaces/
+      </a>
+    </Typography>
+  );
+
   return (
     <SectionCard
       isDarkTheme={isDarkTheme}
@@ -107,7 +120,7 @@ export default function RecentDesignsCard({ isDarkTheme }) {
           }}
           alignSelf="flex-start"
         >
-          <CustomTooltip title="Designs in this list are those owned by you, available in your currently selected Organization and Workspace. Learn more about Spaces at https://docs.layer5.io/cloud/spaces/">
+          <CustomTooltip title={RecentDesignsTooltipTitle}>
             <div>
               <InfoCircleIcon height={24} width={24} />
             </div>
