@@ -86,20 +86,12 @@ const HeaderSection = ({ isDarkTheme }) => (
           window.ddClient.host.openExternal("https://docs.layer5.io/kanvas/")
         }
       />      
-  <MuiBox
-      display="flex"
-      justifyContent={"end"}
-      gap={4}
-      alignItems={"center"}
-      m={2}
-    >
-      <VersionInfoSection isDarkTheme={isDarkTheme} />
       <VideosButton
         isDarkTheme={isDarkTheme}
         onClick={() =>
           window.ddClient.host.openExternal("https://docs.layer5.io/videos/")
         }
-      />     
+      />
       <UserAccountSection isDarkTheme={isDarkTheme} />
     </MuiBox>
     <MuiBox display="flex" justifyContent="center" mb={2}>
