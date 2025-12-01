@@ -11,7 +11,7 @@ import {
   ComponentWrapper,
   SectionWrapper,
   StyledButton,
-  StyledLink
+  StyledLink,
 } from "./styledComponents";
 import {
   InfoCircleIcon,
@@ -23,6 +23,7 @@ import {
 import { providerUrl } from "../utils/constants";
 import { Dasboard } from "./AuthedDashboard";
 import QanelasSistentThemeProvider from "../../theme/QanelasSistentThemeProvider";
+import { openExternalLink } from "../utils/hooks";
 
 // Fallback theme provider for when Docker extension themes aren't available
 const DockerMuiThemeProviderWithFallback = ({ children }) => {
@@ -66,128 +67,6 @@ const AuthenticatedMsg = "Authenticated";
 const UnauthenticatedMsg = "Unauthenticated";
 const proxyUrl = "http://127.0.0.1:7877";
 const httpDelete = "DELETE";
-const httpPost = "POST";
-
-/**
- * Gets the raw b64 file and convert it to uint8Array
- *
- * @param {string} dataUrl
- * @returns {number[]} - return array of uint8Array
- */
-const getUnit8ArrayDecodedFile = (dataUrl) => {
-  // Extract base64 content
-  const [, base64Content] = dataUrl.split(";base64,");
-  // Decode base64 content
-  const decodedContent = atob(base64Content);
-  // Convert decoded content to Uint8Array directly
-  const uint8Array = Uint8Array.from(decodedContent, (char) =>
-    char.charCodeAt(0),
-  );
-  return Array.from(uint8Array);
-};
-
-function mergeFullHTMLIntoCurrentPage(htmlString, proxyBase = proxyUrl) {
-  const parser = new DOMParser();
-  const newDoc = parser.parseFromString(htmlString, "text/html");
-
-  if (!newDoc || !newDoc.head || !newDoc.body) {
-    console.error("Invalid HTML content");
-    return;
-  }
-
-  // === 🔁 Helper: Rewrite absolute paths ===
-  const rewriteAbsolutePaths = (str) =>
-    str.replace(/(["'`(=])\/(?!\/)/g, `$1${proxyBase}/`);
-
-  const rewriteUrls = (el, attr) => {
-    const val = el.getAttribute(attr);
-    if (val && val.startsWith("/")) {
-      el.setAttribute(attr, proxyBase + val);
-    }
-  };
-
-  const tagsToRewrite = [
-    { tag: "script", attr: "src" },
-    { tag: "link", attr: "href" },
-    { tag: "img", attr: "src" },
-    { tag: "iframe", attr: "src" },
-    { tag: "source", attr: "src" },
-    { tag: "video", attr: "src" },
-    { tag: "audio", attr: "src" },
-    { tag: "a", attr: "href" },
-  ];
-
-  // === 🔁 Rewrite URLs in newDoc ===
-  tagsToRewrite.forEach(({ tag, attr }) => {
-    newDoc.querySelectorAll(tag).forEach((el) => rewriteUrls(el, attr));
-  });
-
-  // === 🔁 Rewrite inline API references in <script>, <style>, etc. ===
-  const textContentTags = ["script", "style", "template"];
-  textContentTags.forEach((tag) => {
-    newDoc.querySelectorAll(tag).forEach((el) => {
-      if (el.textContent && el.textContent.includes('"api/')) {
-        el.textContent = rewriteAbsolutePaths(el.textContent);
-      }
-    });
-  });
-
-  // === ⚡ Replace <body> ===
-  document.body.replaceWith(newDoc.body.cloneNode(true));
-
-  // === 🧠 Merge <head> ===
-  const existingHead = document.head;
-  const existingTags = Array.from(existingHead.children).map(
-    (el) => el.outerHTML,
-  );
-
-  Array.from(newDoc.head.children).forEach((el) => {
-    const html = el.outerHTML;
-    if (existingTags.includes(html)) return;
-
-    if (tagsToRewrite.some(({ tag }) => tag === el.tagName.toLowerCase())) {
-      const { attr } = tagsToRewrite.find(
-        (t) => t.tag === el.tagName.toLowerCase(),
-      );
-      rewriteUrls(el, attr);
-    }
-
-    if (el.tagName === "SCRIPT") {
-      const newScript = document.createElement("script");
-      for (let attr of el.attributes) {
-        newScript.setAttribute(attr.name, attr.value);
-      }
-      newScript.textContent = rewriteAbsolutePaths(el.textContent || "");
-      existingHead.appendChild(newScript);
-    } else {
-      existingHead.appendChild(el.cloneNode(true));
-    }
-  });
-}
-
-export function RemoteShellLoader() {
-  useEffect(() => {
-    async function loadRemoteHTML() {
-      try {
-        const response = await fetch(proxyUrl, {
-          credentials: "include", // optional
-        });
-
-        if (!response.ok) throw new Error("Failed to load remote HTML");
-
-        const html = await response.text();
-
-        mergeFullHTMLIntoCurrentPage(html);
-      } catch (error) {
-        console.error("Failed to load remote index.html", error);
-      }
-    }
-
-    loadRemoteHTML();
-  }, []);
-
-  return null; // optionally show loading spinner
-}
 
 const useThemeDetector = () => {
   const getCurrentTheme = () =>
@@ -313,25 +192,6 @@ const ExtensionsComponent = () => {
     }
   }, [user]);
 
-  const onMouseOver = (e) => {
-    let target = e.target.closest("div");
-    target.style.transition = "all .5s";
-    target.style.transform = "scale(1)";
-  };
-  const onMouseOut = (e) => {
-    setIsHovered(!isHovered);
-    let target = e.target.closest("div");
-    target.style.transition = "all .8s";
-    target.style.transform = "scale(1)";
-  };
-  const onClick = (e) => {
-    let target = e.target.closest("div");
-    target.style.transition = "all .2s";
-    target.style.transform = "scale(0.8)";
-    isChanging(true);
-    setIsHovered(true);
-  };
-
   const OpenDocs = () => {
     // window.location.href = proxyUrl;
     window.ddClient.host.openExternal(`https://docs.layer5.io/kanvas/`);
@@ -345,16 +205,19 @@ const ExtensionsComponent = () => {
       {/* <Typography variant="body1" component="p" sx={{ mt: 0.5 }}>
         Sign in for the following benefits:
       </Typography> */}
-      <ul style={{listStylePosition: "inside", paddingLeft:"1rem"}}>
+      <ul style={{ listStylePosition: "inside", paddingLeft: "1rem" }}>
         <li>to save your work</li>
         <li>to collaborate with others</li>
         <li>to securely connect your infrastructure</li>
       </ul>
-       <Typography variant="body1" component="p" sx={{ mt: 0.5 }}>
-        It's free. 
-        Learn more at {" "}
-          <a href="https://docs.layer5.io/cloud" style={{color:"#00b39f"}}>
-          docs.layer5.io/cloud</a>
+      <Typography variant="body1" component="p" sx={{ mt: 0.5 }}>
+        It's free. Learn more at{" "}
+        <a
+          onClick={openExternalLink("https://docs.layer5.io/cloud")}
+          style={{ color: "#00b39f" }}
+        >
+          docs.layer5.io/cloud
+        </a>
       </Typography>
     </div>
   );
@@ -369,7 +232,6 @@ const ExtensionsComponent = () => {
   }
 
   return (
-
     <DockerMuiThemeProviderWithFallback>
       <CssBaseline />
       {changing && (
@@ -415,36 +277,40 @@ const ExtensionsComponent = () => {
               </Typography>
             </div>
           </div>
-        
+
           <SectionWrapper>
             <ExtensionWrapper
               className="third-step"
               sx={{ backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE" }}
-            ><Box
-          display="inline"
-          position="relative"
-          justifySelf="flex-end"
-          alignSelf="flex-start"
-          margin="-.5rem 0rem 1rem -.5rem"
-        >
-
-       <CustomTooltip title={signInTooltipTitle}>
-            <div>
-              <InfoCircleIcon height={24} width={24} />
-            </div>
-          </CustomTooltip>
-          </Box>
+            >
+              <Box
+                display="inline"
+                position="relative"
+                justifySelf="flex-end"
+                alignSelf="flex-start"
+                margin="-.5rem 0rem 1rem -.5rem"
+              >
+                <CustomTooltip title={signInTooltipTitle}>
+                  <div>
+                    <InfoCircleIcon height={24} width={24} />
+                  </div>
+                </CustomTooltip>
+              </Box>
               <AccountDiv>
                 {!isLoggedIn ? (
-                  <Box sx={{ flexDirection: "row", alignItems:"start", margin: "auto" }}>
-                     
+                  <Box
+                    sx={{
+                      flexDirection: "row",
+                      alignItems: "start",
+                      margin: "auto",
+                    }}
+                  >
                     <Box
                       display="flex"
                       flexDirection="row"
                       gap={1}
                       alignItems="center"
                       mb={2}
-
                     >
                       {/* <Typography variant="h6" whiteSpace="nowrap">
                         Login to Layer5 Cloud
@@ -478,14 +344,15 @@ const ExtensionsComponent = () => {
                           console.log("provider url", url);
                           window?.ddClient?.host?.openExternal?.(url);
                         }}
-                        sx={{backgroundColor: "transparent",border:"1px solid #00b39f"}}
-
+                        sx={{
+                          backgroundColor: "transparent",
+                          border: "1px solid #00b39f",
+                        }}
                       >
                         Login
                       </StyledButton>
                     </Box>
                     {/* <Typography sx={{color: "#ccc"}}>(free)</Typography> */}
-                    
                   </Box>
                 ) : (
                   <></>
@@ -496,7 +363,6 @@ const ExtensionsComponent = () => {
         </QanelasSistentThemeProvider>
       </ComponentWrapper>
     </DockerMuiThemeProviderWithFallback>
-    
   );
 };
 
