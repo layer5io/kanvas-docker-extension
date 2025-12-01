@@ -76,6 +76,9 @@ export default function RecentDesignsCard({ isDarkTheme }) {
     const myDesignsURL = `https://cloud.layer5.io/catalog/content/my-designs/${name}-${design.id}?source=%257B%2522type%2522%253A%2522my-designs%2522%257D`;
     window.ddClient.host.openExternal(myDesignsURL);
   };
+  const RecentsTooltipTitle = (
+    <Typography variant="body2">Designs in this list are those owned by you, available in your currently selected Organization and Workspace. Learn more about Spaces at https://docs.layer5.io/cloud/spaces/</Typography>
+  );
 
   return (
     <SectionCard
@@ -90,7 +93,7 @@ export default function RecentDesignsCard({ isDarkTheme }) {
           "row", }}
           alignSelf="flex-start">
           <CustomTooltip 
-            title="Designs in this list are those owned by you, available in your currently selected Organization and Workspace. Learn more about Spaces at https://docs.layer5.io/cloud/spaces/">
+            title={RecentsTooltipTitle}>
             <div>
               <InfoCircleIcon height={24} width={24} />
             </div>
