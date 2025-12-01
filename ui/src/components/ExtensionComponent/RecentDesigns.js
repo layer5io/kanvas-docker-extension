@@ -9,9 +9,13 @@ import {
   IconButton,
   Typography,
   CircularProgress,
-  Box
+  Box,
 } from "@mui/material";
-import { ExternalLinkIcon, CustomTooltip, InfoCircleIcon } from "@sistent/sistent";
+import {
+  ExternalLinkIcon,
+  CustomTooltip,
+  InfoCircleIcon,
+} from "@sistent/sistent";
 import { DesignIcon } from "@sistent/sistent";
 
 import { getFormatDate } from "@sistent/sistent";
@@ -67,12 +71,14 @@ export default function RecentDesignsCard({ isDarkTheme }) {
   }, [fetchRecentDesigns]);
 
   const openDesignInKanvas = (design) => {
-    const kanvasURL = `http://localhost:9081/extension/meshmap?mode=design&design=${encodeURIComponent(design.id)}`;
+    const kanvasURL = `${ProxyUrl}/extension/meshmap?mode=design&design=${design.id}`;
     window.location.href = kanvasURL;
   };
 
   const openDesignInCloud = (design) => {
-    const name = encodeURIComponent(design.name.replace(/\s+/g, "-").toLowerCase());
+    const name = encodeURIComponent(
+      design.name.replace(/\s+/g, "-").toLowerCase(),
+    );
     const myDesignsURL = `https://cloud.layer5.io/catalog/content/my-designs/${name}-${design.id}?source=%257B%2522type%2522%253A%2522my-designs%2522%257D`;
     window.ddClient.host.openExternal(myDesignsURL);
   };
@@ -80,27 +86,51 @@ export default function RecentDesignsCard({ isDarkTheme }) {
     <Typography variant="body2">Designs in this list are those owned by you, available in your currently selected Organization and Workspace. Learn more about Spaces at https://docs.layer5.io/cloud/spaces/</Typography>
   );
 
+  const RecentDesignsTooltipTitle = (
+    <Typography variant="body1" component="p" sx={{ mt: 0.5 }}>
+      Designs in this list are those owned by you, available in your currently
+      selected Organization and Workspace. Learn more about Spaces at
+      <a
+        onClick={() => openExternalLink("https://docs.layer5.io/cloud/spaces/")}
+        style={{ color: "#00b39f" }}
+      >
+        https://docs.layer5.io/cloud/spaces/
+      </a>
+    </Typography>
+  );
+
   return (
     <SectionCard
       isDarkTheme={isDarkTheme}
       sx={{ flexDirection: "column", pt: "0.5rem", pb: "0.5rem" }}
     >
-      <Box display="flex" justifyContent="center"
-          alignContent="center" width="100%">
-        <Box display="flex" justifySelf="center"
-          sx={{display:"flex", margin:"auto", marginRight:"-1rem",
-          alignSelf:"flex-start", justifySelf:"center", flexDirection:
-          "row", }}
-          alignSelf="flex-start">
-          <CustomTooltip 
-            title={RecentsTooltipTitle}>
+
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignContent="center"
+        width="100%"
+      >
+        <Box
+          display="flex"
+          justifySelf="center"
+          sx={{
+            display: "flex",
+            margin: "auto",
+            marginRight: "-1rem",
+            alignSelf: "flex-start",
+            justifySelf: "center",
+            flexDirection: "row",
+          }}
+          alignSelf="flex-start"
+        >
+          <CustomTooltip title={RecentDesignsTooltipTitle}>
             <div>
               <InfoCircleIcon height={24} width={24} />
             </div>
           </CustomTooltip>
-          </Box>
-        <CardHeader title="Recent Designs" 
-        sx={{flexGrow:1}} />
+        </Box>
+        <CardHeader title="Recent Designs" sx={{ flexGrow: 1 }} />
       </Box>
       <CardContent>
         {loading ? (
@@ -121,10 +151,11 @@ export default function RecentDesignsCard({ isDarkTheme }) {
                 onClick={() => openDesignInKanvas(design)}
                 style={{ cursor: "pointer" }}
                 divider
-                sx={{  "&:hover": {
-                  backgroundColor: isDarkTheme ? "#4F5B69" : "#C0C7CB", // A shade darker
-                },
-}}
+                sx={{
+                  "&:hover": {
+                    backgroundColor: isDarkTheme ? "#4F5B69" : "#C0C7CB", // A shade darker
+                  },
+                }}
                 secondaryAction={
                   <IconButton
                     onClick={(e) => {
@@ -134,16 +165,25 @@ export default function RecentDesignsCard({ isDarkTheme }) {
                     edge="end"
                     aria-label="open"
                     sx={{ "&:hover": { "& svg": { fill: "#00b39f" } } }}
-                    >
-                   <ExternalLinkIcon width="16" fill="#ccc"  />
+                  >
+                    <ExternalLinkIcon width="16" fill="#ccc" />
                   </IconButton>
                 }
               >
-                <ListItemIcon sx={{ minWidth: "32px"}}>
+                <ListItemIcon sx={{ minWidth: "32px" }}>
                   <DesignIcon />
                 </ListItemIcon>
-                <ListItemText primary={design.name} style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap", marginRight: "1rem" }} />
-                <ListItemText style={{ color: "#ccc", textAlign: "right" }}
+                <ListItemText
+                  primary={design.name}
+                  style={{
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                    marginRight: "1rem",
+                  }}
+                />
+                <ListItemText
+                  style={{ color: "#ccc", textAlign: "right" }}
                   primary={`Updated ${getFormatDate(design.updated_at)}`}
                 />
               </ListItem>

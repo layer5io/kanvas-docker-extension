@@ -15,3 +15,7 @@ export const useThemeDetector = () => {
   }, []);
   return isDarkTheme;
 };
+
+export const openExternalLink = (url) => {
+  window.ddClient.host.openExternal(url);
+};
