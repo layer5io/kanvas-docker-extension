@@ -6,7 +6,6 @@ const VideosIcon = ({ width = 32, height = 32 }) => (
     height={height}
     version="1.1"
     viewBox="0 0 32 32"
-    xml:space="preserve" 
     fill="#fff"
     xmlns="http://www.w3.org/2000/svg"
     enable-background="new 0 0 32 32"
