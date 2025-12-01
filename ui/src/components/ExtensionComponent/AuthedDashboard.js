@@ -224,7 +224,7 @@ const ImportDesignSection = ({ isDarkTheme }) => {
   const ImportDesignTooltipTitle = (
     <Typography variant="body1" component="p" sx={{ mt: 0.5 }}>
       Supported formats: Helm chart, Kubernetes manifest, Kustomize, and Docker
-      Compose. Learn more at
+      Compose. Learn more at{" "}
       <a
         onClick={() =>
           openExternalLink("https://docs.layer5.io/kanvas/getting-started/")
