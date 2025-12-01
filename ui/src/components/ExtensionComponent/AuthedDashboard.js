@@ -246,7 +246,7 @@ const VersionInfoSection = ({ isDarkTheme }) => {
         <VersionText>{kanvasVersion}</VersionText>
       </CustomTooltip>
       <a
-        href={`https://docs.Kanvas.io/project/releases/${kanvasVersion}`}
+        href={`https://docs.layer5.io/project/releases/${kanvasVersion}`}
         target="_blank"
         rel="noreferrer"
         style={{ color: isDarkTheme ? "white" : "black" }}
