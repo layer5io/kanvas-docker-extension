@@ -24,6 +24,7 @@ import { InfoCircleIcon, CustomTooltip, Box, CircularProgress,SistentThemeProvid
 // import KanvasColor from "../../img/SVGs/kanvasColor";
 import KanvasWhite from "../../img/SVGs/kanvasWhite";
 import DocsIcon from "../../img/SVGs/docsIcon";
+import VideosIcon from "../../img/SVGs/videosIcon";
 import KanvasHorizontalLight from "../../img/SVGs/KanvasHorizontalLight";
 
 import { randomApplicationNameGenerator } from "../../utils";
@@ -52,6 +53,23 @@ const DocsButton = ({ isDarkTheme, onClick }) => (
   </StyledButton>
 );
 
+const VideosButton = ({ isDarkTheme, onClick }) => (
+  <StyledButton
+    size="small"
+    onClick={onClick}
+    style={{
+      backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE",
+    }}
+  >
+    <VideosIcon
+      width="24"
+      height="24"
+      CustomColor={isDarkTheme ? "white" : "#3C494F"}
+    />
+    &nbsp;Videos
+  </StyledButton>
+);
+
 const HeaderSection = ({ isDarkTheme }) => (
   <MuiBox>
     <MuiBox
@@ -68,7 +86,12 @@ const HeaderSection = ({ isDarkTheme }) => (
           window.ddClient.host.openExternal("https://docs.layer5.io/kanvas/")
         }
       />      
-
+      <VideosButton
+        isDarkTheme={isDarkTheme}
+        onClick={() =>
+          window.ddClient.host.openExternal("https://docs.layer5.io/videos/")
+        }
+      />
       <UserAccountSection isDarkTheme={isDarkTheme} />
     </MuiBox>
     <MuiBox display="flex" justifyContent="center" mb={2}>
