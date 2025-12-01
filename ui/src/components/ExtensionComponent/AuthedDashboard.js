@@ -75,9 +75,11 @@ const HeaderSection = ({ isDarkTheme }) => (
     <MuiBox
       display="flex"
       justifyContent={"end"}
-      gap={4}
+      gap={1}
       alignItems={"center"}
-      m={2}
+      ml={2}
+      mr={4}
+      my={2}
     >
       <VersionInfoSection isDarkTheme={isDarkTheme} />
       <DocsButton
