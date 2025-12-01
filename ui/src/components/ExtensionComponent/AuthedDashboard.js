@@ -30,6 +30,7 @@ import {
 // import KanvasColor from "../../img/SVGs/kanvasColor";
 import KanvasWhite from "../../img/SVGs/kanvasWhite";
 import DocsIcon from "../../img/SVGs/docsIcon";
+import VideosIcon from "../../img/SVGs/videosIcon";
 import KanvasHorizontalLight from "../../img/SVGs/KanvasHorizontalLight";
 
 import { randomApplicationNameGenerator } from "../../utils";
@@ -59,20 +60,45 @@ const DocsButton = ({ isDarkTheme, onClick }) => (
   </StyledButton>
 );
 
+const VideosButton = ({ isDarkTheme, onClick }) => (
+  <StyledButton
+    size="small"
+    onClick={onClick}
+    style={{
+      backgroundColor: isDarkTheme ? "#393F49" : "#D7DADE",
+    }}
+  >
+    <VideosIcon
+      width="24"
+      height="24"
+      CustomColor={isDarkTheme ? "white" : "#3C494F"}
+    />
+    &nbsp;Videos
+  </StyledButton>
+);
+
 const HeaderSection = ({ isDarkTheme }) => (
   <MuiBox>
     <MuiBox
       display="flex"
       justifyContent={"end"}
-      gap={4}
+      gap={1}
       alignItems={"center"}
-      m={2}
+      ml={2}
+      mr={4}
+      my={2}
     >
       <VersionInfoSection isDarkTheme={isDarkTheme} />
       <DocsButton
         isDarkTheme={isDarkTheme}
         onClick={() =>
           window.ddClient.host.openExternal("https://docs.layer5.io/kanvas/")
+        }
+      />      
+      <VideosButton
+        isDarkTheme={isDarkTheme}
+        onClick={() =>
+          window.ddClient.host.openExternal("https://docs.layer5.io/videos/")
         }
       />
 
@@ -281,7 +307,7 @@ const VersionInfoSection = ({ isDarkTheme }) => {
       <a
         onClick={() =>
           openExternalLink(
-            `https://docs.Kanvas.io/project/releases/${kanvasVersion}`,
+            `https://docs.layer5.io/project/releases/${kanvasVersion}`,
           )
         }
         target="_blank"

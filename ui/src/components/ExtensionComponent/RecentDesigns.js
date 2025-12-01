@@ -82,6 +82,9 @@ export default function RecentDesignsCard({ isDarkTheme }) {
     const myDesignsURL = `https://cloud.layer5.io/catalog/content/my-designs/${name}-${design.id}?source=%257B%2522type%2522%253A%2522my-designs%2522%257D`;
     window.ddClient.host.openExternal(myDesignsURL);
   };
+  const RecentsTooltipTitle = (
+    <Typography variant="body2">Designs in this list are those owned by you, available in your currently selected Organization and Workspace. Learn more about Spaces at https://docs.layer5.io/cloud/spaces/</Typography>
+  );
 
   const RecentDesignsTooltipTitle = (
     <Typography variant="body1" component="p" sx={{ mt: 0.5 }}>
@@ -101,6 +104,7 @@ export default function RecentDesignsCard({ isDarkTheme }) {
       isDarkTheme={isDarkTheme}
       sx={{ flexDirection: "column", pt: "0.5rem", pb: "0.5rem" }}
     >
+
       <Box
         display="flex"
         justifyContent="center"
