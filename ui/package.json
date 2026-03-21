@@ -21,7 +21,7 @@
     "@testing-library/user-event": "^13.5.0",
     "assert": "^2.1.0",
     "axios": "^1.12.0",
-    "billboard.js": "^3.17.2",
+    "billboard.js": "^3.18.0",
     "fs": "^0.0.1-security",
     "https-browserify": "^1.0.0",
     "isomorphic-unfetch": "^3.1.0",
