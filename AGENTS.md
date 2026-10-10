@@ -107,7 +107,7 @@ Sistent.
 
 - **Component Reuse:** Prefer existing `@sistent/sistent` UI primitives before creating custom components.
 - **Design Tokens:** Prefer existing Sistent theme/token values over hardcoded brand colors.
-- **Design Guidance Reference:** Consult the canonical Sistent design contract at [layer5io/sistent DESIGN.md](https://github.com/layer5io/sistent/blob/master/DESIGN.md). Do not create or maintain a separate `DESIGN.md` in this repository.
+- **Design Guidance Reference:** Consult the canonical Sistent design contract at [layer5io/sistent DESIGN.md](https://github.com/layer5io/sistent/blob/v0.15.12/DESIGN.md). Do not create or maintain a separate `DESIGN.md` in this repository.
 - **Version Compatibility:** The `ui/` directory pins `@sistent/sistent@0.15.12`. Because the upstream `DESIGN.md` reflects modern Sistent releases (v0.21.2+), always verify tokens, components, and exported APIs against the locally installed `0.15.12` package before adopting newer patterns.
 
 ## Contribution Guidelines
